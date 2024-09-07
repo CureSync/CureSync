@@ -1,6 +1,12 @@
 import os
-
 import dj_database_url
+import cloudinary
+
+cloudinary.config(
+    cloud_name = os.environ.get("CLOUD_NAME"),
+    api_key = os.environ.get("API_KEY"),
+    api_secret = os.environ.get("API_SECRET")
+)
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = os.environ.get("SECRET_KEY")
@@ -17,6 +23,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',    
+    'cloudinary'
 ]
 
 MIDDLEWARE = [

@@ -9,14 +9,14 @@ import os
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
 
+from cloudinary import uploader
+from cloudinary.utils import cloudinary_url
+
 from django.core.mail import send_mail
 import random
 import string
 from django.conf import settings
 
-
-
-# Logout function
 def logout(request):
     auth.logout(request)
     request.session.pop('patientid', None)
@@ -24,7 +24,6 @@ def logout(request):
     request.session.pop('adminid', None)
     return render(request, 'homepage/index.html')
 
-# Admin sign-in function
 def sign_in_admin(request):
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -45,7 +44,6 @@ def sign_in_admin(request):
     else:
         return render(request, 'admin/signin/signin.html')
 
-# Patient sign-up function with OTP
 def signup_patient(request):
     if request.method == 'POST':
         form_data = {
@@ -60,14 +58,23 @@ def signup_patient(request):
             'password1': request.POST.get('password1'),
         }
 
-        # Handle image upload
-        if 'profile_image' in request.FILES:
-            image = request.FILES['profile_image']
-            image_name = f"{form_data['username']}{os.path.splitext(image.name)[1]}"
-            path = os.path.join('templates', 'patient_image', image_name)
-            default_storage.save(path, ContentFile(image.read()))
-            form_data['profile_image'] = path
-
+        DEFAULT_IMAGE_URL = "https://res.cloudinary.com/dj0ibhe7o/image/upload/v1725732817/CureSync/a3nnedse2frsntlkcojx.webp"
+    
+        if 'profile_picture' in request.FILES:
+            image_file = request.FILES['profile_picture']
+            try:
+                upload_result = uploader.upload(image_file.read(), 
+                                                folder="profile_pictures", 
+                                                public_id=f"user_{form_data['username']}")  
+                image_url = upload_result['secure_url']
+                form_data['profile_picture'] = image_url
+            except Exception as e:
+                print(f"Cloudinary upload failed: {str(e)}")
+                form_data['profile_picture'] = DEFAULT_IMAGE_URL
+        else:
+            form_data['profile_picture'] = DEFAULT_IMAGE_URL
+        
+            
 
         # Validate form data
         if not all(form_data.values()):
@@ -99,7 +106,6 @@ def signup_patient(request):
 
     return render(request, 'patient/signup_form/signup.html')
 
-# Patient OTP verification function
 def verify_otp_patient(request):
     form_data = request.session.get('patient_signup_data')
     if not form_data:
@@ -123,7 +129,8 @@ def verify_otp_patient(request):
                 dob=form_data['dob'],
                 gender=form_data['gender'],
                 address=form_data['address'],
-                mobile_no=form_data['mobile']
+                mobile_no=form_data['mobile'],
+                profile_picture=form_data['profile_picture']
             )
             patient_new.save()
 
@@ -138,7 +145,6 @@ def verify_otp_patient(request):
 
     return render(request, 'patient/signup_form/verify_otp.html')
 
-# Patient sign-in function
 def sign_in_patient(request):
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -167,6 +173,7 @@ def savepdata(request, patientusername):
         gender = request.POST.get('gender')
         address = request.POST.get('address')
         mobile_no = request.POST.get('mobile_no')
+        profile_picture = request.POST.get('profile_picture')
         
         try:
             dobdate = datetime.strptime(dob, '%Y-%m-%d')
@@ -180,11 +187,20 @@ def savepdata(request, patientusername):
             )
 
             # Handle image upload
-            if 'profile_image' in request.FILES:
-                image = request.FILES['profile_image']
-                image_name = f"{patientusername}{os.path.splitext(image.name)[1]}"
-                path = os.path.join(settings.MEDIA_ROOT, 'patient_image', image_name)
-                default_storage.save(path, ContentFile(image.read()))
+            if 'profile_picture' in request.FILES:
+                image_url=""
+                if 'profile_picture' in request.FILES:
+                    image_file = request.FILES['profile_picture']
+                    try:
+                        upload_result = uploader.upload(image_file.read(), 
+                                                        folder="profile_pictures", 
+                                                        public_id=f"user_{patientusername}")  
+                        image_url = upload_result['secure_url']
+                    except Exception as e:
+                        print(f"Cloudinary upload failed: {str(e)}")
+
+                if image_url != puser.patient.profile_picture and image_url != "":
+                    patient.objects.filter(pk=puser.patient).update(profile_picture=image_url)
 
             messages.success(request, "Changes saved successfully!")
         except Exception as e:
@@ -192,7 +208,6 @@ def savepdata(request, patientusername):
 
     return redirect('pviewprofile', patientusername)
     
-# Doctor sign-up function
 def generate_otp():
     return ''.join(random.choices(string.digits, k=6))
 
@@ -222,15 +237,22 @@ def signup_doctor(request):
             'specialization': request.POST.get('specialization'),
         }
 
-        # Handle image upload
-        if 'profile_image' in request.FILES:
-            image = request.FILES['profile_image']
-            image_name = f"{form_data['username']}{os.path.splitext(image.name)[1]}"
-            path = os.path.join('templates', 'patient_image', image_name)
-            default_storage.save(path, ContentFile(image.read()))
-            form_data['profile_image'] = path
-
-
+        DEFAULT_IMAGE_URL = "https://res.cloudinary.com/dj0ibhe7o/image/upload/v1725732817/CureSync/a3nnedse2frsntlkcojx.webp"
+    
+        if 'profile_picture' in request.FILES:
+            image_file = request.FILES['profile_picture']
+            try:
+                upload_result = uploader.upload(image_file.read(), 
+                                                folder="profile_pictures",  
+                                                public_id=f"user_{form_data['username']}") 
+                image_url = upload_result['secure_url']
+                form_data['profile_picture'] = image_url
+            except Exception as e:
+                print(f"Cloudinary upload failed: {str(e)}")
+                form_data['profile_picture'] = DEFAULT_IMAGE_URL
+        else:
+            form_data['profile_picture'] = DEFAULT_IMAGE_URL
+    
         # Validate form data
         if not all(form_data.values()):
             messages.error(request, 'Please fill in all fields.')
@@ -289,7 +311,8 @@ def verify_otp(request):
                 year_of_registration=form_data['year_of_registration'],
                 qualification=form_data['qualification'],
                 State_Medical_Council=form_data['State_Medical_Council'],
-                specialization=form_data['specialization']
+                specialization=form_data['specialization'],
+                profile_picture=form_data['profile_picture']
             )
             doctor_new.save()
 
@@ -303,7 +326,7 @@ def verify_otp(request):
             messages.error(request, 'Invalid OTP. Please try again.')
 
     return render(request, 'doctor/verify_otp.html')
-# Doctor sign-in function
+
 def sign_in_doctor(request):
     if request.method == 'GET':
         return render(request, 'doctor/signin_page/index.html')
@@ -328,7 +351,6 @@ def sign_in_doctor(request):
     else:
         return render(request, 'doctor/signin_page/index.html')
 
-# Save doctor data
 def saveddata(request, doctorusername):
     if request.method == 'POST':
         name = request.POST['name']
@@ -347,11 +369,22 @@ def saveddata(request, doctorusername):
         doctor.objects.filter(pk=duser.doctor).update(name=name, dob=dob, gender=gender, address=address, mobile_no=mobile_no, registration_no=registration_no, year_of_registration=yor, qualification=qualification, State_Medical_Council=State_Medical_Council, specialization=specialization)
 
         # Handle image upload
-        if 'profile_image' in request.FILES:
-            print('image found')
-            image = request.FILES['profile_image']
-            image_name = f"{doctorusername}{os.path.splitext(image.name)[1]}"
-            path = os.path.join('templates', 'doctor_image', image_name)
-            default_storage.save(path, ContentFile(image.read()))
+        if 'profile_picture' in request.FILES:
+           
+            if 'profile_picture' in request.FILES:
+                image_url=""
+                if 'profile_picture' in request.FILES:
+                    image_file = request.FILES['profile_picture']
+                    try:
+                        upload_result = uploader.upload(image_file.read(), 
+                                                        folder="profile_pictures", 
+                                                        public_id=f"user_{doctorusername}")  
+                        image_url = upload_result['secure_url']
+                    except Exception as e:
+                        print(f"Cloudinary upload failed: {str(e)}")
+
+
+            if image_url != duser.doctor.profile_picture:
+                doctor.objects.filter(pk=duser.doctor).update(profile_picture=image_url)
 
         return redirect('dviewprofile', doctorusername)

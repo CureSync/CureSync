@@ -179,7 +179,7 @@ def patient_ui(request):
       if request.user.is_authenticated:
         patientusername = request.session['patientusername']
         puser = User.objects.get(username=patientusername)
-        image_path = static(f'patient_image/{patientusername}.png')
+        image_path = puser.patient.profile_picture
     
 
         return render(request,'patient/patient_ui/profile.html' , {"puser":puser, "dp": image_path} )
@@ -419,7 +419,7 @@ def doctor_ui(request):
       if average_rating is None:
           average_rating = 0
 
-      image_path = static(f'doctor_image/{duser.username}.png')
+      image_path = duser.doctor.profile_picture
 
 
       return render(request, 'doctor/doctor_ui/profile.html', {
@@ -456,7 +456,7 @@ def consult_a_doctor(request):
 
         return render(request,'patient/consult_a_doctor/consult_a_doctor.html',{"dobj":dobj})
 
-def  make_consultation(request, doctorusername):
+def make_consultation(request, doctorusername):
 
     if request.method == 'POST':
        
@@ -488,7 +488,7 @@ def  make_consultation(request, doctorusername):
          
         return redirect('consultationview',consultation_new.id)
 
-def  consultationview(request,consultation_id):
+def consultationview(request,consultation_id):
    
     if request.method == 'GET':
 

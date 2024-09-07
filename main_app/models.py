@@ -19,6 +19,7 @@ class patient(models.Model):
     address = models.CharField(max_length = 100)
     mobile_no = models.CharField(max_length = 15)
     gender = models.CharField(max_length = 10)
+    profile_picture = models.CharField(max_length=100, default='https://res.cloudinary.com/dj0ibhe7o/image/upload/v1725732927/CureSync/ejsfgg3gczmydmxrates.webp')
 
     
     @property
@@ -51,6 +52,8 @@ class doctor(models.Model):
     specialization = models.CharField(max_length = 30)
 
     rating = models.IntegerField(default=0)
+    profile_picture = models.CharField(max_length=100, default='https://res.cloudinary.com/dj0ibhe7o/image/upload/v1725732817/CureSync/a3nnedse2frsntlkcojx.webp')
+
 
 class diseaseinfo(models.Model):
 
