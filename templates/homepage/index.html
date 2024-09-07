@@ -1,0 +1,115 @@
+﻿{% extends "basic.html" %}
+{% load static %}
+
+{% block body %}
+<section class="text-black bg-gray-100">
+    <div class="grid max-w-screen-xl min-h-screen items-center px-4 py-8 lg:py-16 mx-auto lg:gap-8 xl:gap-0 lg:grid-cols-12 lg:flex-row-reverse">
+
+        <!-- Image Section -->
+        <div class="relative lg:col-span-6 flex justify-center items-center h-full overflow-hidden order-2 lg:order-1">
+            <!-- Default Image (visible by default) -->
+            <img id="default-image" src="{% static 'homepage/doctor.png' %}" alt="Default Image" class="w-[12rem] md:w-[15rem] lg:w-[18rem] opacity-0 animate-image-in">
+
+            <!-- Patient Image -->
+            <img id="patient-image" src="{% static 'homepage/doctor.png' %}" alt="Patient" class="hidden absolute w-[12rem] md:w-[15rem] lg:w-[18rem] transition-opacity duration-500 opacity-0">
+
+            <!-- Doctor Image -->
+            <img id="doctor-image" src="{% static 'homepage/doctor.png' %}" alt="Doctor" class="hidden absolute w-[12rem] md:w-[15rem] lg:w-[18rem] transition-opacity duration-500 opacity-0">
+        </div>
+
+        <!-- Text Section -->
+        <div class="flex flex-col gap-6 md:gap-8 justify-center items-start lg:col-span-6 sm-down: p-10 order-1 lg:order-2">
+            <h1 class="primaryFont text-3xl md:text-4xl lg:text-5xl xl:text-6xl tracking-tight leading-tight dark:text-white">
+                Healthcare solutions that simplify the practice of care
+            </h1>
+            <p class="text-md md:text-lg lg:text-xl text-gray-600 dark:text-gray-300 max-w-lg">
+                Sign in as a patient or doctor to explore our services and access personalized healthcare solutions tailored to your needs.
+            </p>
+            <div class="mt-4 flex md:mt-6 flex md:flex-col md:flex-row gap-4 md:gap-8">
+                <!-- Patient Button -->
+                <a href="{% url 'sign_in_patient' %}" id="patient-btn" 
+                    class="flex items-center justify-center bg-blue-500 text-white font-bold border-b-4 border-blue-600 hover:bg-blue-600 hover:border-blue-700 px-4 md:px-6 py-2 md:py-3 text-md md:text-lg rounded-lg transition-transform transform hover:scale-105">
+                    Sign in as a Patient
+                </a>
+
+                <!-- Doctor Button -->
+                <a href="{% url 'sign_in_doctor' %}" id="doctor-btn" 
+                class="flex items-center justify-center bg-green-500 text-white font-bold border-b-4 border-green-600 hover:bg-green-600 hover:border-green-700 px-4 md:px-6 py-2 md:py-3 text-md md:text-lg rounded-lg transition-transform transform hover:scale-105">
+                    Sign in as a Doctor
+                </a>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- Custom Animation Styles -->
+<style>
+    @keyframes image-in {
+        0% {
+            opacity: 0;
+            transform: scale(0.5) translateY(100px);
+        }
+        100% {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+        }
+    }
+
+    .animate-image-in {
+        animation: image-in 2s ease-out forwards;
+    }
+</style>
+
+<script>
+    window.addEventListener('load', function() {
+        // Add the page load animation class to the section
+        document.querySelector('section').classList.add('page-load-animation');
+
+        // Get the elements
+        const patientBtn = document.getElementById('patient-btn');
+        const doctorBtn = document.getElementById('doctor-btn');
+        const patientImage = document.getElementById('patient-image');
+        const doctorImage = document.getElementById('doctor-image');
+        const defaultImage = document.getElementById('default-image');
+
+        // Show patient image on hover with animation
+        patientBtn.addEventListener('mouseover', function() {
+            doctorImage.classList.add('opacity-0', 'hidden');
+            patientImage.classList.remove('hidden');
+            defaultImage.classList.add('opacity-0');
+            setTimeout(() => {
+                patientImage.classList.remove('opacity-0');
+            }, 50);
+        });
+
+        // Show doctor image on hover with animation
+        doctorBtn.addEventListener('mouseover', function() {
+            patientImage.classList.add('opacity-0', 'hidden');
+            doctorImage.classList.remove('hidden');
+            defaultImage.classList.add('opacity-0');
+            setTimeout(() => {
+                doctorImage.classList.remove('opacity-0');
+            }, 50);
+        });
+
+        // Show default image when mouse leaves patient button
+        patientBtn.addEventListener('mouseleave', function() {
+            patientImage.classList.add('opacity-0');
+            setTimeout(() => {
+                patientImage.classList.add('hidden');
+                defaultImage.classList.remove('opacity-0');
+            }, 500);
+        });
+
+        // Show default image when mouse leaves doctor button
+        doctorBtn.addEventListener('mouseleave', function() {
+            doctorImage.classList.add('opacity-0');
+            setTimeout(() => {
+                doctorImage.classList.add('hidden');
+                defaultImage.classList.remove('opacity-0');
+            }, 500);
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,134 @@
+<!-- templates/doctor/signup.html -->
+{% extends "basic.html" %}
+{% load static %}
+
+{% block head %}
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+{% endblock %}
+
+{% block body %}
+    <div class="bg-gray-100 flex items-center justify-center p-10">
+        <form action="{% url 'signup_doctor' %}" method="POST" class="bg-white p-8 rounded-lg shadow-lg w-full max-w-3xl">
+            <h1 class="text-2xl font-bold text-center mb-6">Sign Up as Doctor</h1>
+            
+            {% csrf_token %}
+
+            <div class="mb-4">
+                {% for message in messages %}
+                <div class="bg-red-200 text-red-700 p-2 rounded mb-2">
+                    <h3>{{ message }}</h3>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="mb-4">
+                    <label for="username" class="block text-gray-700 font-medium mb-1">Username</label>
+                    <input id="username" name="username" type="text" placeholder="Username" class="input-field w-full p-3 border rounded-lg" required value="{{ form_data.username }}">
+                </div>
+
+                <div class="mb-4">
+                    <label for="name" class="block text-gray-700 font-medium mb-1">Name</label>
+                    <input id="name" name="name" type="text" placeholder="Name" class="input-field w-full p-3 border rounded-lg" required value="{{ form_data.name }}">
+                </div>
+
+                <div class="mb-4">
+                    <label for="email" class="block text-gray-700 font-medium mb-1">Email</label>
+                    <input id="email" name="email" type="email" placeholder="Email" class="input-field w-full p-3 border rounded-lg" required value="{{ form_data.email }}">
+                </div>
+
+                
+                <div class="mb-4">
+                    <label for="dob" class="block text-gray-700 font-medium mb-1">Date of Birth</label>
+                    <input id="dob" name="dob" type="date" class="input-field w-full p-3 border rounded-lg" required>
+                </div>
+
+                <div class="mb-4">
+                    <label for="age" class="block text-gray-700 font-medium mb-1">Age</label>
+                    <input id="age" name="age" type="number" placeholder="Age" class="input-field w-full p-3 border rounded-lg" required>
+                </div>
+
+                <div class="mb-4">
+                    <label for="address" class="block text-gray-700 font-medium mb-1">Address</label>
+                    <input id="address" name="address" type="text" placeholder="Address" class="input-field w-full p-3 border rounded-lg" required>
+                </div>
+
+                <div class="mb-4">
+                    <label for="mobile" class="block text-gray-700 font-medium mb-1">Mobile</label>
+                    <input id="mobile" name="mobile" type="tel" placeholder="Mobile" class="input-field w-full p-3 border rounded-lg" required>
+                </div>
+
+                <div class="mb-4">
+                    <label for="registration_no" class="block text-gray-700 font-medium mb-1">Registration Number</label>
+                    <input id="registration_no" name="registration_no" type="text" placeholder="Registration Number" class="input-field w-full p-3 border rounded-lg" required>
+                </div>
+
+                <div class="mb-4">
+                    <label for="year_of_registration" class="block text-gray-700 font-medium mb-1">Year of Registration</label>
+                    <input id="year_of_registration" name="year_of_registration" type="date" class="input-field w-full p-3 border rounded-lg" required>
+                </div>
+
+                <div class="mb-4">
+                    <label for="qualification" class="block text-gray-700 font-medium mb-1">Qualification</label>
+                    <input id="qualification" name="qualification" type="text" placeholder="Qualification" class="input-field w-full p-3 border rounded-lg" required>
+                </div>
+
+                <div class="mb-4">
+                    <label for="State_Medical_Council" class="block text-gray-700 font-medium mb-1">State Medical Council</label>
+                    <input id="State_Medical_Council" name="State_Medical_Council" type="text" placeholder="State Medical Council" class="input-field w-full p-3 border rounded-lg" required>
+                </div>
+
+                <div class="mb-4">
+                    <label for="specialization" class="block text-gray-700 font-medium mb-1">Specialization</label>
+                    <select id="specialization" name="specialization" class="input-field w-full p-3 border rounded-lg">
+                        <option disabled selected>Select Specialization</option>
+                        <option>Rheumatologist</option>
+                        <option>Cardiologist</option>
+                        <option>ENT Specialist</option>
+                        <option>Orthopedist</option>
+                        <option>Neurologist</option>
+                        <option>Allergist/Immunologist</option>
+                        <option>Urologist</option>
+                        <option>Dermatologist</option>
+                        <option>Gastroenterologist</option>
+                        <option>Other</option>
+                    </select>
+                </div>
+
+
+                <div class="mb-4">
+                    <label for="password" class="block text-gray-700 font-medium mb-1">Password</label>
+                    <input id="password" name="password" type="password" placeholder="Password" class="input-field w-full p-3 border rounded-lg" required>
+                </div>
+
+                <div class="mb-6">
+                    <label for="password1" class="block text-gray-700 font-medium mb-1">Retype Password</label>
+                    <input id="password1" name="password1" type="password" placeholder="Retype Password" class="input-field w-full p-3 border rounded-lg" required>
+                </div>
+
+                <!-- Gender Field -->
+                <div class="flex flex-row gap-4 justify-evenly w-full border border-gray-300 rounded-lg py-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 hover:shadow-lg transition duration-300" required>
+                    <label class="inline-flex items-center gap-4">
+                        <input type="radio" name="gender" value="male" class="form-radio text-indigo-600" {% if form_data.gender == 'male' %}checked{% endif %}>
+                        <span class="text-gray-700">Male</span>
+                    </label>
+                    <label class="inline-flex items-center gap-4">
+                        <input type="radio" name="gender" value="female" class="form-radio text-indigo-600" {% if form_data.gender == 'female' %}checked{% endif %}>
+                        <span class="text-gray-700">Female</span>
+                    </label>
+                    <label class="inline-flex items-center gap-4">
+                        <input type="radio" name="gender" value="other" class="form-radio text-indigo-600" {% if form_data.gender == 'other' %}checked{% endif %}>
+                        <span class="text-gray-700">Other</span>
+                    </label>
+                </div>
+
+                <div class="mb-4">
+                    <label for="profile_image" class="block text-gray-700 font-medium mb-2">Profile Image</label>
+                    <input type="file" id="profile_image" name="profile_image" accept="image/*" class="w-full p-3 border rounded-lg focus:ring-blue-500 focus:border-blue-500" required>
+                </div>
+            </div>
+
+            <button type="submit" class="bg-blue-500 text-white py-3 px-6 rounded-lg hover:bg-blue-600 transition duration-300">Register</button>
+        </form>
+    </div>
+{% endblock %}

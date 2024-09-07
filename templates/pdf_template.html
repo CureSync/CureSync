@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediction Report</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f4f7f6;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            background-color: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            border-radius: 10px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+            border-bottom: 2px solid #00aaff;
+            padding-bottom: 10px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: bold;
+            color: #00aaff;
+        }
+
+        .report-content {
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .report-content h2 {
+            font-size: 20px;
+            margin: 0;
+            color: #444;
+        }
+
+        .report-content p {
+            margin: 0;
+            font-size: 16px;
+            color: #666;
+        }
+
+        .icon {
+            color: #00aaff;
+            font-size: 24px;
+        }
+
+        .report-content p {
+            flex-grow: 1;
+            padding-left: 10px;
+            border-left: 2px solid #00aaff;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            color: #aaa;
+            font-size: 12px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+
+            .report-content h2 {
+                font-size: 18px;
+            }
+
+            .report-content p {
+                font-size: 14px;
+            }
+
+            .header h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-file-medical-alt"></i> Prediction Report</h1>
+        </div>
+
+        <div class="report-content">
+            <i class="fas fa-diagnoses icon"></i>
+            <div>
+                <h2>Predicted Disease:</h2>
+                <p>{{ disease }}</p>
+            </div>
+        </div>
+
+        <div class="report-content">
+            <i class="fas fa-percentage icon"></i>
+            <div>
+                <h2>Confidence Score:</h2>
+                <p>{{ confidence }}%</p>
+            </div>
+        </div>
+
+        <div class="report-content">
+            <i class="fas fa-user-md icon"></i>
+            <div>
+                <h2>Recommended Doctor:</h2>
+                <p>{{ consultdoctor }}</p>
+            </div>
+        </div>
+
+        <div class="footer">
+            © 2024 Your Clinic - All rights reserved.
+        </div>
+    </div>
+</body>
+
+</html>

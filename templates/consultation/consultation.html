@@ -1,0 +1,226 @@
+{% extends "basic.html" %}
+{% load static %}
+
+{% block head %}
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        .chat-container {
+            height: calc(100vh - 18rem);
+            background: #F3F4F6;
+            border-radius: 10px;
+        }
+        .chat-messages {
+            height: calc(100% - 6rem);
+            background-color: #FFFFFF;
+            border-radius: 10px;
+            padding: 10px;
+            overflow-y: auto;
+        }
+        .section-title {
+            font-weight: bold;
+            color: #1F2937;
+            margin-bottom: 0.5rem;
+        }
+        .section-content {
+            padding: 1.5rem;
+            background-color: #FFFFFF;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .rating-box {
+            display: flex;
+            align-items: center;
+        }
+        .rating-box select {
+            margin-right: 0.5rem;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+<div class="md-down: p-8 min-h-screen bg-gray-100">
+    <div class="max-w-7xl mx-auto py-8 sm:px-6 lg:px-8">
+        
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Left Column -->
+            <div class="section-content">
+                <h3 class="section-title text-xl font-semibold text-gray-800 mb-4">Consultation Details</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <!-- Predicted Disease -->
+                    <div class="p-4 bg-white shadow rounded-lg flex items-center space-x-4">
+                        <span class="text-indigo-600 font-bold text-lg material-icons">local_hospital</span>
+                        <div>
+                            <dt class="text-sm font-medium text-gray-600">Predicted Disease</dt>
+                            <dd class="mt-1 text-md font-semibold text-gray-900">{{consultation.diseaseinfo.diseasename}}</dd>
+                        </div>
+                    </div>
+                    <!-- Confidence Score -->
+                    <div class="p-4 bg-white shadow rounded-lg flex items-center space-x-4">
+                        <span class="text-green-500 font-bold text-lg material-icons">check_circle</span>
+                        <div>
+                            <dt class="text-sm font-medium text-gray-600">Confidence Score</dt>
+                            <dd class="mt-1 text-md font-semibold text-gray-900">{{consultation.diseaseinfo.confidence}}%</dd>
+                        </div>
+                    </div>
+                    <!-- Patient Age -->
+                    <div class="p-4 bg-white shadow rounded-lg flex items-center space-x-4">
+                        <span class="text-blue-500 font-bold text-lg material-icons">person</span>
+                        <div>
+                            <dt class="text-sm font-medium text-gray-600">Patient Age</dt>
+                            <dd class="mt-1 text-md font-semibold text-gray-900">{{consultation.patient.age}}</dd>
+                        </div>
+                    </div>
+                    <!-- Consultation Date -->
+                    <div class="p-4 bg-white shadow rounded-lg flex items-center space-x-4">
+                        <span class="text-yellow-500 font-bold text-lg material-icons">date_range</span>
+                        <div>
+                            <dt class="text-sm font-medium text-gray-600">Consultation Date</dt>
+                            <dd class="mt-1 text-md font-semibold text-gray-900">{{consultation.consultation_date}}</dd>
+                        </div>
+                    </div>
+                    <!-- Consultation Status -->
+                    <div class="p-4 bg-white shadow rounded-lg flex items-center space-x-4">
+                        <span class="text-green-500 font-bold text-lg material-icons">assignment_turned_in</span>
+                        <div>
+                            <dt class="text-sm font-medium text-gray-600">Consultation Status</dt>
+                            <dd class="mt-1 text-md font-semibold text-green-600">{{consultation.status}}</dd>
+                        </div>
+                    </div>
+                </div>
+            
+                <!-- Doctor Information with Link -->
+                <div class="mt-6">
+                    <h4 class="text-sm font-medium text-gray-600 mb-2">Doctor</h4>
+                    <div class="p-4 bg-white shadow rounded-lg flex items-center space-x-4">
+                        <span class="text-red-500 font-bold text-lg material-icons">person</span>
+                        <div>
+                            <a href="{% url 'dviewprofile' consultation.doctor.user.username %}" class="text-md font-semibold text-indigo-600 hover:text-indigo-800">{{consultation.doctor.name}}</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-6">
+                    <h4 class="text-sm font-medium text-gray-600 mb-2">Patient</h4>
+                    <div class="p-4 bg-white shadow rounded-lg flex items-center space-x-4">
+                        <span class="text-red-500 font-bold text-lg material-icons">person</span>
+                        <div>
+                            <a href="{% url 'pviewprofile' consultation.patient.name %}" class="text-md font-semibold text-indigo-600 hover:text-indigo-800">{{consultation.patient.name}}</a>
+                        </div>
+                    </div>
+                </div>
+            
+                <!-- Symptoms List -->
+                <div class="mt-6">
+                    <h4 class="text-sm font-medium text-gray-600 mb-2">Symptoms</h4>
+                    <ul class="space-y-2">
+                        {% for symptom in consultation.diseaseinfo.symptomsname %}
+                            <li class="flex items-center p-3 bg-white shadow rounded-lg">
+                                <span class="text-red-500 material-icons mr-3">coronavirus</span>
+                                <span class="text-md font-medium text-gray-900">{{ symptom }}</span>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            
+            
+
+            <!-- Right Column (Chat) -->
+            <div class="flex flex-col gap-2">
+                <div class="chat-container p-4 shadow-lg">
+                    <div class="bg-indigo-600 px-4 py-3 rounded-t-lg">
+                        <h3 class="text-lg font-medium text-white">Chat Box</h3>
+                    </div>
+                    <div id="chat-body" class="chat-messages mt-4 rounded-b-lg">
+                        <ul id="msg-list" class="space-y-4">
+                            {% include 'consultation/chat_body.html' %}
+                        </ul>
+                    </div>
+                </div>
+                <div class="bg-white p-4 rounded-lg shadow">
+                    <form id="chat-form" class="flex">
+                        {% csrf_token %}
+                        <input 
+                            type="text" 
+                            id="chat-msg" 
+                            name="chat-msg" 
+                            class="flex-grow rounded-l-md border-none focus:outline-none focus:ring-0 focus:border-gray-300"
+                            placeholder="Type a message"
+                        >
+                        <button 
+                            id="send" 
+                            type="submit" 
+                            class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-r-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-0"
+                        >
+                            Send
+                        </button>
+                    </form>
+                    
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+<script>
+    $('#send').click(function(event){
+        event.preventDefault();
+        $.ajax({
+            url: "{% url 'post' %}",
+            type: "POST",
+            data: {
+                msgbox: $('#chat-msg').val(),
+                csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val()
+            },
+            success: function(json){
+                $('#chat-msg').val('');
+                $('#msg-list').append('<li class="flex justify-end"><div class="bg-indigo-100 rounded-lg px-4 py-2 max-w-xs"><p class="text-sm text-gray-800">' + json.msg + '</p></div></li>');
+                scrollToBottom();
+            }
+        });
+    });
+
+    function getMessages(){
+        if (!scrolling) {
+            $.ajax({
+                url: "{% url 'chat_messages' %}",
+                type: "GET",
+                success: function(messages) {
+                    $('#msg-list').html(messages);
+                    scrollToBottom();
+                }
+            });
+        }
+        scrolling = false;
+    }
+
+    function scrollToBottom() {
+        var chatBody = document.getElementById('chat-body');
+        chatBody.scrollTop = chatBody.scrollHeight;
+    }
+
+    var scrolling = false;
+    $(function(){
+        $('#chat-body').on('scroll', function(){
+            scrolling = true;
+        });
+        refreshTimer = setInterval(getMessages, 2000);
+    });
+
+    $(document).ready(function() {
+        getMessages();
+        $('#send').attr('disabled', 'disabled');
+        $('#chat-msg').keyup(function() {
+            if ($(this).val() != '') {
+                $('#send').removeAttr('disabled');
+            } else {
+                $('#send').attr('disabled', 'disabled');
+            }
+        });
+        scrollToBottom();
+    });
+</script>
+{% endblock %}

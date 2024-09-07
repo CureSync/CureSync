@@ -1,0 +1,32 @@
+<!-- templates/patient/verify_otp.html -->
+{% extends "basic.html" %}
+{% load static %}
+
+{% block body %}
+<div class="min-h-screen flex items-center justify-center bg-gray-100 py-10 px-4 md:px-0">
+    <form action="{% url 'verify_otp_patient' %}" method="POST" class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+        <h1 class="text-3xl font-bold text-center mb-8 text-gray-800">Verify OTP</h1>
+        
+        {% csrf_token %}
+
+        {% if messages %}
+            <div class="mb-4">
+                {% for message in messages %}
+                <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded mb-4">
+                    <p>{{ message }}</p>
+                </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <div class="mb-6">
+            <label for="otp" class="block text-gray-700 font-medium mb-2">Enter OTP</label>
+            <input id="otp" name="otp" type="text" placeholder="OTP" class="input-field w-full p-3 border rounded-lg focus:ring-blue-500 focus:border-blue-500" required>
+        </div>
+
+        <button type="submit" class="bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 transition-colors w-full">
+            Verify OTP
+        </button>
+    </form>
+</div>
+{% endblock %}
