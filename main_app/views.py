@@ -439,8 +439,8 @@ def dviewprofile(request, doctorusername):
          average_rating = r.aggregate(Avg('rating'))['rating__avg']
          if average_rating == None:
             average_rating = 0
-
-         return render(request,'doctor/view_profile/view_profile.html', {"duser":duser, "rate":r, "average_rating": round(average_rating, 1) } )
+         image_path = duser.doctor.profile_picture
+         return render(request,'doctor/view_profile/view_profile.html', {"duser":duser, "rate":r, "average_rating": round(average_rating, 1), "dp": image_path  } )
     
 def consult_a_doctor(request):
 

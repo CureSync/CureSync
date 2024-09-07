@@ -353,38 +353,43 @@ def sign_in_doctor(request):
 
 def saveddata(request, doctorusername):
     if request.method == 'POST':
-        name = request.POST['name']
-        dob = request.POST['dob']
-        gender = request.POST['gender']
-        address = request.POST['address']
-        mobile_no = request.POST['mobile_no']
-        registration_no = request.POST['registration_no']
-        year_of_registration = request.POST['year_of_registration']
-        qualification = request.POST['qualification']
-        State_Medical_Council = request.POST['State_Medical_Council']
-        specialization = request.POST['specialization']
-        dobdate = datetime.strptime(dob, '%Y-%m-%d')
-        yor = datetime.strptime(year_of_registration, '%Y-%m-%d')
-        duser = User.objects.get(username=doctorusername)
-        doctor.objects.filter(pk=duser.doctor).update(name=name, dob=dob, gender=gender, address=address, mobile_no=mobile_no, registration_no=registration_no, year_of_registration=yor, qualification=qualification, State_Medical_Council=State_Medical_Council, specialization=specialization)
+        try:
+            name = request.POST['name']
+            dob = request.POST['dob']
+            gender = request.POST['gender']
+            address = request.POST['address']
+            mobile_no = request.POST['mobile_no']
+            registration_no = request.POST['registration_no']
+            year_of_registration = request.POST['year_of_registration']
+            qualification = request.POST['qualification']
+            State_Medical_Council = request.POST['State_Medical_Council']
+            specialization = request.POST['specialization']
+            dobdate = datetime.strptime(dob, '%Y-%m-%d')
+            yor = datetime.strptime(year_of_registration, '%Y-%m-%d')
 
-        # Handle image upload
-        if 'profile_picture' in request.FILES:
-           
+            duser = User.objects.get(username=doctorusername)
+
+            doctor.objects.filter(pk=duser.doctor).update(name=name, dob=dob, gender=gender, address=address, mobile_no=mobile_no, registration_no=registration_no, year_of_registration=yor, qualification=qualification, State_Medical_Council=State_Medical_Council, specialization=specialization)
+
+            # Handle image upload
             if 'profile_picture' in request.FILES:
-                image_url=""
+            
                 if 'profile_picture' in request.FILES:
-                    image_file = request.FILES['profile_picture']
-                    try:
-                        upload_result = uploader.upload(image_file.read(), 
-                                                        folder="profile_pictures", 
-                                                        public_id=f"user_{doctorusername}")  
-                        image_url = upload_result['secure_url']
-                    except Exception as e:
-                        print(f"Cloudinary upload failed: {str(e)}")
+                    image_url=""
+                    if 'profile_picture' in request.FILES:
+                        image_file = request.FILES['profile_picture']
+                        try:
+                            upload_result = uploader.upload(image_file.read(), 
+                                                            folder="profile_pictures", 
+                                                            public_id=f"user_{doctorusername}")  
+                            image_url = upload_result['secure_url']
+                        except Exception as e:
+                            print(f"Cloudinary upload failed: {str(e)}")
 
 
-            if image_url != duser.doctor.profile_picture:
-                doctor.objects.filter(pk=duser.doctor).update(profile_picture=image_url)
-
+                if image_url != duser.doctor.profile_picture and image_url != "":
+                    doctor.objects.filter(pk=duser.doctor).update(profile_picture=image_url)
+                    messages.success(request, "Changes saved successfully!")
+        except Exception as e:
+                messages.error(request, f"An error occurred: {str(e)}")
         return redirect('dviewprofile', doctorusername)
