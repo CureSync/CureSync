@@ -76,17 +76,123 @@ def home(request):
                 except User.DoesNotExist:
                     logger.error(f"Doctor user does not exist: {doctorusername}")
 
+            if request.user.is_staff:
+                logger.info("Redirecting admin user")
+                return redirect('admin_ui')
+
         # If the user is not authenticated, redirect to a login or home page
         logger.info("User is not authenticated, rendering home.html")
         return render(request, 'homepage/index.html')
 
-from django.shortcuts import render, redirect
-from django.db.models import Count
+# from django.shortcuts import render
+# from django.contrib.auth.models import User
+# from django.db.models import Count, Avg
+# from django.utils import timezone
+# from datetime import timedelta
+# from .models import patient, doctor, consultation, diseaseinfo, rating_review
+
+# def admin_ui(request):
+#     if request.method == 'GET':
+#         if request.user.is_authenticated and request.user.is_staff:
+#             auser = request.user
+            
+#             # Get total counts
+#             total_patients = patient.objects.count()
+#             total_doctors = doctor.objects.count()
+#             total_consultations = consultation.objects.count()
+            
+#             # Calculate growth rates (assuming last 30 days)
+#             thirty_days_ago = timezone.now() - timedelta(days=30)
+#             new_patients = patient.objects.filter(user__date_joined__gte=thirty_days_ago).count()
+#             new_doctors = doctor.objects.filter(user__date_joined__gte=thirty_days_ago).count()
+#             new_consultations = consultation.objects.filter(consultation_date__gte=thirty_days_ago.date()).count()
+            
+#             patient_growth = (new_patients / total_patients) * 100 if total_patients > 0 else 0
+#             doctor_growth = (new_doctors / total_doctors) * 100 if total_doctors > 0 else 0
+#             consultation_growth = (new_consultations / total_consultations) * 100 if total_consultations > 0 else 0
+            
+#             # Get data for user growth trend chart
+#             user_trend_data = (
+#                 User.objects.filter(date_joined__gte=thirty_days_ago)
+#                 .extra({'date': "date(date_joined)"})
+#                 .values('date')
+#                 .annotate(count=Count('id'))
+#                 .order_by('date')
+#             )
+            
+#             # Get data for consultation status distribution chart
+#             consultation_data = (
+#                 consultation.objects.values('status')
+#                 .annotate(count=Count('id'))
+#                 .order_by('-count')
+#             )
+            
+#             # Get top 5 diseases
+#             top_diseases = (
+#                 diseaseinfo.objects.values('diseasename')
+#                 .annotate(count=Count('id'))
+#                 .order_by('-count')[:5]
+#             )
+            
+#             # Get average doctor rating
+#             avg_doctor_rating = doctor.objects.aggregate(Avg('rating'))['rating__avg']
+            
+#             # Get recent activities
+#             recent_activities = []
+#             recent_consultations = consultation.objects.select_related('patient', 'doctor').order_by('-consultation_date')[:5]
+#             for consult in recent_consultations:
+#                 recent_activities.append({
+#                     'type': 'consultation',
+#                     'patient': consult.patient.name,
+#                     'doctor': consult.doctor.name,
+#                     'date': consult.consultation_date,
+#                     'status': consult.status,
+#                 })
+            
+#             recent_reviews = rating_review.objects.select_related('patient', 'doctor').order_by('-id')[:5]
+#             for review in recent_reviews:
+#                 recent_activities.append({
+#                     'type': 'review',
+#                     'patient': review.patient.name,
+#                     'doctor': review.doctor.name,
+#                     'rating': review.rating,
+#                     'review': review.review,
+#                 })
+            
+#             # Sort recent activities by date
+#             recent_activities.sort(key=lambda x: x.get('date', timezone.now()), reverse=True)
+#             recent_activities = recent_activities[:5]  # Limit to 5 most recent activities
+            
+#             context = {
+#                 "auser": auser,
+#                 "total_patients": total_patients,
+#                 "total_doctors": total_doctors,
+#                 "total_consultations": total_consultations,
+#                 "patient_growth": round(patient_growth, 2),
+#                 "doctor_growth": round(doctor_growth, 2),
+#                 "consultation_growth": round(consultation_growth, 2),
+#                 "user_trend_data": list(user_trend_data),
+#                 "consultation_data": list(consultation_data),
+#                 "top_diseases": list(top_diseases),
+#                 "avg_doctor_rating": round(avg_doctor_rating, 2) if avg_doctor_rating else 0,
+#                 "recent_activities": recent_activities,
+#             }
+            
+#             return render(request, 'admin/admin_ui/admin_ui.html', context)
+#         else:
+#             return render(request, "admin/signin/signin.html")
+
+#     if request.method == 'POST':
+#         return render(request, 'patient/patient_ui/profile.html')
+
+from django.shortcuts import render
+from django.contrib.auth.models import User
+from django.db.models import Count, Avg
 from django.utils import timezone
 from datetime import timedelta
 from .models import patient, doctor, consultation, diseaseinfo, rating_review
-from chats.models import Chat, Feedback
-
+import json  
+from django.core.serializers.json import DjangoJSONEncoder
 
 def admin_ui(request):
     if request.method == 'GET':
@@ -117,44 +223,52 @@ def admin_ui(request):
                 .order_by('date')
             )
             
-            # Get data for consultation distribution chart
+            # Get data for consultation status distribution chart
             consultation_data = (
                 consultation.objects.values('status')
                 .annotate(count=Count('id'))
                 .order_by('-count')
             )
             
+            # Get top 5 diseases
+            top_diseases = (
+                diseaseinfo.objects.values('diseasename')
+                .annotate(count=Count('id'))
+                .order_by('-count')[:5]
+            )
+            
+            # Get average doctor rating
+            avg_doctor_rating = rating_review.objects.aggregate(Avg('rating'))['rating__avg']
+            
             # Get recent activities
             recent_activities = []
-            recent_consultations = consultation.objects.order_by('-consultation_date')[:5]
+            recent_consultations = consultation.objects.select_related('patient', 'doctor').order_by('-consultation_date')[:5]
             for consult in recent_consultations:
                 recent_activities.append({
                     'type': 'consultation',
                     'patient': consult.patient.name,
                     'doctor': consult.doctor.name,
                     'date': consult.consultation_date,
+                    'status': consult.status,
                 })
             
-            recent_reviews = rating_review.objects.order_by('-id')[:5]
+            recent_reviews = rating_review.objects.select_related('patient', 'doctor').order_by('-id')[:5]
             for review in recent_reviews:
                 recent_activities.append({
                     'type': 'review',
                     'patient': review.patient.name,
                     'doctor': review.doctor.name,
                     'rating': review.rating,
-                    'date': review.doctor.user.date_joined,  # Using doctor's join date as a fallback
+                    'review': review.review,
+                    'date': review.id,  # Using id as a proxy for date since there's no date field
                 })
             
             # Sort recent activities by date
-            # recent_activities.sort(key=lambda x: x['date'], reverse=True)
-            # recent_activities = recent_activities[:5]  # Limit to 5 most recent activities
-            
-            # Get all feedback
-            feedback_obj = Feedback.objects.all()
+            recent_activities.sort(key=lambda x: x['date'], reverse=True)
+            recent_activities = recent_activities[:5]  # Limit to 5 most recent activities
             
             context = {
                 "auser": auser,
-                "Feedback": feedback_obj,
                 "total_patients": total_patients,
                 "total_doctors": total_doctors,
                 "total_consultations": total_consultations,
@@ -163,17 +277,18 @@ def admin_ui(request):
                 "consultation_growth": round(consultation_growth, 2),
                 "user_trend_data": list(user_trend_data),
                 "consultation_data": list(consultation_data),
-                # "recent_activities": recent_activities,
-                'recent_activities': ['hi'],
+                "top_diseases": list(top_diseases),
+                "avg_doctor_rating": round(avg_doctor_rating, 2) if avg_doctor_rating else 0,
+                "recent_activities": recent_activities,
             }
             
             return render(request, 'admin/admin_ui/admin_ui.html', context)
         else:
-            return redirect('home')
+            return render(request, "admin/signin/signin.html")
 
     if request.method == 'POST':
         return render(request, 'patient/patient_ui/profile.html')
-    
+
 def patient_ui(request):
     if request.method == 'GET':
       if request.user.is_authenticated:

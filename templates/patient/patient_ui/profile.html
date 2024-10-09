@@ -1,142 +1,210 @@
-{% extends "basic.html" %}
-{% load static %} 
-
-{% block head %}
+{% extends "basic.html" %} {% load static %} {% block head %}
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
 <style>
-    .profile-cover {
-        background-image: url('{% static "patient/signin_page/background-patient.jpg" %}');
-        background-size: cover;
-        background-position: center;
-    }
+  .profile-cover {
+    background-image: url('{% static "patient/signin_page/background-patient.jpg" %}');
+    background-size: cover;
+    background-position: center;
+  }
 </style>
-{% endblock %}
-
-{% block body %}
+{% endblock %} {% block body %}
 <div class="container mx-auto px-4 py-8">
-    <!-- Profile Section -->
-    <div class="w-full mb-8 bg-white rounded-xl overflow-hidden shadow-lg">
-        <div class="profile-cover h-64 relative">
-            <div class="absolute inset-0 bg-black bg-opacity-30"></div>
-            <div class="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2 bg-white p-6 rounded-xl shadow-lg w-11/12 max-w-2xl">
-                <div class="flex flex-col md:flex-row items-center">
-                    <img class="w-32 h-32 rounded-full object-cover shadow-lg mb-4 md:mb-0 md:mr-6" 
-                         src="{{ dp }}" alt="{{ puser.patient.name }}">
-                    <div class="text-center md:text-left">
-                        <h2 class="text-2xl font-semibold text-gray-800">{{ puser.patient.name }}</h2>
-                        <p class="text-gray-600">{{ puser.email }}</p>
-                        <a href="{% url 'pviewprofile' puser.username %}" 
-                           class="inline-block bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700 transition duration-300 mt-4">
-                            Edit Profile
-                        </a>
-                    </div>
-                </div>
-            </div>
+  <!-- Profile Section -->
+  <div class="w-full mb-8 bg-white rounded-xl overflow-hidden shadow-lg">
+    <div class="profile-cover h-64 relative">
+      <div class="absolute inset-0 bg-black bg-opacity-30"></div>
+      <div
+        class="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2 bg-white p-6 rounded-xl shadow-lg w-11/12 max-w-2xl"
+      >
+        <div class="flex flex-col md:flex-row items-center">
+          <img
+            class="w-32 h-32 rounded-full object-cover shadow-lg mb-4 md:mb-0 md:mr-6"
+            src="{{ dp }}"
+            alt="{{ puser.patient.name }}"
+          />
+          <div class="text-center md:text-left">
+            <h2 class="text-2xl font-semibold text-gray-800">
+              {{ puser.patient.name }}
+            </h2>
+            <p class="text-gray-600">{{ puser.email }}</p>
+            <a
+              href="{% url 'pviewprofile' puser.username %}"
+              class="inline-block bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-600 transition duration-300 mt-4"
+            >
+              Edit Profile
+            </a>
+          </div>
         </div>
-        <div class="h-32"></div> <!-- Spacer for profile info box -->
+      </div>
     </div>
+    <div class="h-32"></div>
+    <!-- Spacer for profile info box -->
+  </div>
 
-    <!-- Actions Section -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
-        <a href="{% url 'checkdisease' %}" 
-           class="bg-white text-blue-500 flex flex-col items-center justify-center p-6 rounded-xl shadow-lg hover:shadow-2xl transition duration-300 aspect-square">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
-            </svg>
-            <span class="text-xl font-semibold text-center">Check Disease</span>
-        </a>
-        <a href="{% url 'pconsultation_history' %}" 
-           class="bg-white text-blue-500 action-card flex flex-col items-center justify-center p-6 rounded-xl shadow-lg hover:shadow-2xl transition duration-300 aspect-square">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
-            </svg>
-            <span class="text-xl font-semibold text-center">View History</span>
-        </a>
-        <button onclick="openFeedbackModal()" 
-                class="bg-white text-blue-500 action-card flex flex-col items-center justify-center p-6 rounded-xl shadow-lg hover:shadow-2xl transition duration-300 aspect-square">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
-            </svg>
-            <span class="text-xl font-semibold text-center">Give Feedback</span>
-        </button>
-    </div>
+  <!-- Actions Section -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
+    <a
+      href="{% url 'checkdisease' %}"
+      class="bg-white text-blue-500 flex flex-col items-center justify-center p-6 rounded-xl shadow-lg hover:shadow-2xl transition duration-300 aspect-square"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-16 w-16 mb-4"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"
+        />
+      </svg>
+      <span class="text-xl font-semibold text-center">Check Disease</span>
+    </a>
+    <a
+      href="{% url 'pconsultation_history' %}"
+      class="bg-white text-blue-500 action-card flex flex-col items-center justify-center p-6 rounded-xl shadow-lg hover:shadow-2xl transition duration-300 aspect-square"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-16 w-16 mb-4"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
+        />
+      </svg>
+      <span class="text-xl font-semibold text-center">View History</span>
+    </a>
+    <button
+      onclick="openFeedbackModal()"
+      class="bg-white text-blue-500 action-card flex flex-col items-center justify-center p-6 rounded-xl shadow-lg hover:shadow-2xl transition duration-300 aspect-square"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-16 w-16 mb-4"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"
+        />
+      </svg>
+      <span class="text-xl font-semibold text-center">Give Feedback</span>
+    </button>
+  </div>
 </div>
 
 <!-- Feedback Modal -->
-<div id="feedbackModal" class="fixed inset-0 bg-gray-900 bg-opacity-70 hidden items-center justify-center z-50">
-    <div class="bg-white rounded-lg p-8 max-w-md w-full shadow-lg transform transition-all duration-300 scale-95 opacity-0">
-        <h2 class="text-3xl font-semibold mb-6 text-gray-900">Give Feedback</h2>
-        <form id="feedbackForm">
-            {% csrf_token %}
-            <textarea id="feedback" name="feedback" rows="6" class="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none" placeholder="Enter your feedback here..."></textarea>
-            <div class="flex justify-end gap-4 mt-6">
-                <button type="button" onclick="closeFeedbackModal()" class="bg-gray-200 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-300 transition duration-300">Cancel</button>
-                <button type="submit" class="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-300">Submit</button>
-            </div>
-        </form>
-    </div>
+<div
+  id="feedbackModal"
+  class="fixed inset-0 bg-gray-900 bg-opacity-70 hidden items-center justify-center z-50"
+>
+  <div
+    class="bg-white rounded-lg p-8 max-w-md w-full shadow-lg transform transition-all duration-300 scale-95 opacity-0"
+  >
+    <h2 class="text-3xl font-semibold mb-6 text-gray-900">Give Feedback</h2>
+    <form id="feedbackForm">
+      {% csrf_token %}
+      <textarea
+        id="feedback"
+        name="feedback"
+        rows="6"
+        class="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+        placeholder="Enter your feedback here..."
+      ></textarea>
+      <div class="flex justify-end gap-4 mt-6">
+        <button
+          type="button"
+          onclick="closeFeedbackModal()"
+          class="bg-gray-200 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-300 transition duration-300"
+        >
+          Cancel
+        </button>
+        <button
+          type="submit"
+          class="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-300"
+        >
+          Submit
+        </button>
+      </div>
+    </form>
+  </div>
 </div>
 
 <script>
-function openFeedbackModal() {
-    const modal = document.getElementById('feedbackModal');
-    const modalContent = modal.querySelector('div');
-    modal.classList.remove('hidden');
-    modal.classList.add('flex');
+  function openFeedbackModal() {
+    const modal = document.getElementById("feedbackModal");
+    const modalContent = modal.querySelector("div");
+    modal.classList.remove("hidden");
+    modal.classList.add("flex");
     anime({
-        targets: modalContent,
-        scale: [0.9, 1],
-        opacity: [0, 1],
-        easing: 'easeOutElastic(1, .8)',
-        duration: 600
+      targets: modalContent,
+      scale: [0.9, 1],
+      opacity: [0, 1],
+      easing: "easeOutElastic(1, .8)",
+      duration: 600,
     });
-}
+  }
 
-function closeFeedbackModal() {
-    const modal = document.getElementById('feedbackModal');
-    const modalContent = modal.querySelector('div');
+  function closeFeedbackModal() {
+    const modal = document.getElementById("feedbackModal");
+    const modalContent = modal.querySelector("div");
     anime({
-        targets: modalContent,
-        scale: [1, 0.9],
-        opacity: [1, 0],
-        easing: 'easeInElastic(1, .8)',
-        duration: 300,
-        complete: () => {
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
-        }
+      targets: modalContent,
+      scale: [1, 0.9],
+      opacity: [1, 0],
+      easing: "easeInElastic(1, .8)",
+      duration: 300,
+      complete: () => {
+        modal.classList.add("hidden");
+        modal.classList.remove("flex");
+      },
     });
-}
+  }
 
-document.getElementById('feedbackForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    fetch("{% url 'post_feedback' %}", {
-        method: 'POST',
+  document
+    .getElementById("feedbackForm")
+    .addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      fetch("{% url 'post_feedback' %}", {
+        method: "POST",
         body: new FormData(this),
         headers: {
-            'X-CSRFToken': this.querySelector('[name=csrfmiddlewaretoken]').value
-        }
-    })
-    .then(response => response.text())
-    .then(data => {
-        alert(data);
-        closeFeedbackModal();
-    })
-    .catch(error => console.error('Error:', error));
-});
-
-// Animate action cards on page load
-document.addEventListener('DOMContentLoaded', () => {
-    anime({
-        targets: '.action-card',
-        translateY: [20, 0],
-        opacity: [0, 1],
-        delay: anime.stagger(100),
-        easing: 'easeOutQuad',
-        duration: 500
+          "X-CSRFToken": this.querySelector("[name=csrfmiddlewaretoken]").value,
+        },
+      })
+        .then((response) => response.text())
+        .then((data) => {
+          alert(data);
+          closeFeedbackModal();
+        })
+        .catch((error) => console.error("Error:", error));
     });
-});
+
+  // Animate action cards on page load
+  document.addEventListener("DOMContentLoaded", () => {
+    anime({
+      targets: ".action-card",
+      translateY: [20, 0],
+      opacity: [0, 1],
+      delay: anime.stagger(100),
+      easing: "easeOutQuad",
+      duration: 500,
+    });
+  });
 </script>
 {% endblock %}

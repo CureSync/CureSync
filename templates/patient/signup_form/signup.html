@@ -1,88 +1,196 @@
 <!-- templates/patient/signup.html -->
-{% extends "basic.html" %}
-{% load static %}
+{% extends "basic.html" %} {% load static %} {% block head %}
+<link
+  href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+  rel="stylesheet"
+/>
+<style>
+   .bg-image {
+    background-image: url("{% static 'patient/signup_form/background-patient.jpg' %}");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+</style>
+{% endblock %} {% block body %}
+<div
+  class="min-h-screen flex items-center justify-center bg-image bg-gray-100 py-10 px-4 md:px-0"
+>
+  <form
+    action="{% url 'signup_patient' %}"
+    method="POST"
+    class="bg-white p-8 rounded-lg shadow-lg w-full max-w-4xl"
+  >
+    <h1 class="text-3xl font-bold text-center mb-8 text-gray-800">
+      Sign Up as Patient
+    </h1>
 
-{% block head %}
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-{% endblock %}
+    {% csrf_token %} {% if messages %}
+    <div class="mb-4">
+      {% for message in messages %}
+      <div
+        class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded mb-4"
+      >
+        <p>{{ message }}</p>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
 
-{% block body %}
-<div class="min-h-screen flex items-center justify-center bg-gray-100 py-10 px-4 md:px-0">
-    <form action="{% url 'signup_patient' %}" method="POST" class="bg-white p-8 rounded-lg shadow-lg w-full max-w-4xl">
-        <h1 class="text-3xl font-bold text-center mb-8 text-gray-800">Sign Up as Patient</h1>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+      <div class="mb-4">
+        <label for="username" class="block text-gray-700 font-medium mb-2"
+          >Username</label
+        >
+        <input
+          id="username"
+          name="username"
+          type="text"
+          placeholder="Username"
+          class="input-field w-full p-3 border rounded-lg focus:ring-blue-500 focus:border-blue-500"
+          required
+          value="{{ form_data.username }}"
+        />
+      </div>
 
-        {% csrf_token %}
+      <div class="mb-4">
+        <label for="name" class="block text-gray-700 font-medium mb-2"
+          >Name</label
+        >
+        <input
+          id="name"
+          name="name"
+          type="text"
+          placeholder="Name"
+          class="input-field w-full p-3 border rounded-lg focus:ring-blue-500 focus:border-blue-500"
+          required
+          value="{{ form_data.name }}"
+        />
+      </div>
 
-        {% if messages %}
-            <div class="mb-4">
-                {% for message in messages %}
-                <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded mb-4">
-                    <p>{{ message }}</p>
-                </div>
-                {% endfor %}
-            </div>
-        {% endif %}
+      <div class="mb-4">
+        <label for="email" class="block text-gray-700 font-medium mb-2"
+          >Email</label
+        >
+        <input
+          id="email"
+          name="email"
+          type="email"
+          placeholder="Email"
+          class="input-field w-full p-3 border rounded-lg focus:ring-blue-500 focus:border-blue-500"
+          required
+          value="{{ form_data.email }}"
+        />
+      </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            <div class="mb-4">
-                <label for="username" class="block text-gray-700 font-medium mb-2">Username</label>
-                <input id="username" name="username" type="text" placeholder="Username" class="input-field w-full p-3 border rounded-lg focus:ring-blue-500 focus:border-blue-500" required value="{{ form_data.username }}">
-            </div>
+      <div class="mb-4">
+        <label for="dob" class="block text-gray-700 font-medium mb-2"
+          >Date of Birth</label
+        >
+        <input
+          id="dob"
+          name="dob"
+          type="date"
+          class="input-field w-full p-3 border rounded-lg focus:ring-blue-500 focus:border-blue-500"
+          required
+        />
+      </div>
 
-            <div class="mb-4">
-                <label for="name" class="block text-gray-700 font-medium mb-2">Name</label>
-                <input id="name" name="name" type="text" placeholder="Name" class="input-field w-full p-3 border rounded-lg focus:ring-blue-500 focus:border-blue-500" required value="{{ form_data.name }}">
-            </div>
+      <div class="mb-4">
+        <label for="gender" class="block text-gray-700 font-medium mb-2"
+          >Gender</label
+        >
+        <select
+          id="gender"
+          name="gender"
+          class="input-field w-full p-3 border rounded-lg focus:ring-blue-500 focus:border-blue-500"
+        >
+          <option disabled selected>Select Gender</option>
+          <option>Male</option>
+          <option>Female</option>
+          <option>Other</option>
+        </select>
+      </div>
 
-            <div class="mb-4">
-                <label for="email" class="block text-gray-700 font-medium mb-2">Email</label>
-                <input id="email" name="email" type="email" placeholder="Email" class="input-field w-full p-3 border rounded-lg focus:ring-blue-500 focus:border-blue-500" required value="{{ form_data.email }}">
-            </div>
+      <div class="mb-4">
+        <label for="address" class="block text-gray-700 font-medium mb-2"
+          >Address</label
+        >
+        <input
+          id="address"
+          name="address"
+          type="text"
+          placeholder="Address"
+          class="input-field w-full p-3 border rounded-lg focus:ring-blue-500 focus:border-blue-500"
+          required
+        />
+      </div>
 
-            <div class="mb-4">
-                <label for="dob" class="block text-gray-700 font-medium mb-2">Date of Birth</label>
-                <input id="dob" name="dob" type="date" class="input-field w-full p-3 border rounded-lg focus:ring-blue-500 focus:border-blue-500" required>
-            </div>
+      <div class="mb-4">
+        <label for="mobile" class="block text-gray-700 font-medium mb-2"
+          >Mobile</label
+        >
+        <input
+          id="mobile"
+          name="mobile"
+          type="tel"
+          placeholder="Mobile"
+          class="input-field w-full p-3 border rounded-lg focus:ring-blue-500 focus:border-blue-500"
+          required
+        />
+      </div>
 
-            <div class="mb-4">
-                <label for="gender" class="block text-gray-700 font-medium mb-2">Gender</label>
-                <select id="gender" name="gender" class="input-field w-full p-3 border rounded-lg focus:ring-blue-500 focus:border-blue-500">
-                    <option disabled selected>Select Gender</option>
-                    <option>Male</option>
-                    <option>Female</option>
-                    <option>Other</option>
-                </select>
-            </div>
+      <div class="mb-4">
+        <label for="password" class="block text-gray-700 font-medium mb-2"
+          >Password</label
+        >
+        <input
+          id="password"
+          name="password"
+          type="password"
+          placeholder="Password"
+          class="input-field w-full p-3 border rounded-lg focus:ring-blue-500 focus:border-blue-500"
+          required
+        />
+      </div>
 
-            <div class="mb-4">
-                <label for="address" class="block text-gray-700 font-medium mb-2">Address</label>
-                <input id="address" name="address" type="text" placeholder="Address" class="input-field w-full p-3 border rounded-lg focus:ring-blue-500 focus:border-blue-500" required>
-            </div>
+      <div class="mb-6">
+        <label for="password1" class="block text-gray-700 font-medium mb-2"
+          >Confirm Password</label
+        >
+        <input
+          id="password1"
+          name="password1"
+          type="password"
+          placeholder="Confirm Password"
+          class="input-field w-full p-3 border rounded-lg focus:ring-blue-500 focus:border-blue-500"
+          required
+        />
+      </div>
 
-            <div class="mb-4">
-                <label for="mobile" class="block text-gray-700 font-medium mb-2">Mobile</label>
-                <input id="mobile" name="mobile" type="tel" placeholder="Mobile" class="input-field w-full p-3 border rounded-lg focus:ring-blue-500 focus:border-blue-500" required>
-            </div>
+      <div class="mb-4">
+        <label
+          for="profile_picture"
+          class="block text-gray-700 font-medium mb-2"
+          >Profile Image</label
+        >
+        <input
+          type="file"
+          id="profile_picture"
+          name="profile_picture"
+          accept="image/*"
+          class="w-full p-3 border rounded-lg focus:ring-blue-500 focus:border-blue-500"
+          required
+        />
+      </div>
+    </div>
 
-            <div class="mb-4">
-                <label for="password" class="block text-gray-700 font-medium mb-2">Password</label>
-                <input id="password" name="password" type="password" placeholder="Password" class="input-field w-full p-3 border rounded-lg focus:ring-blue-500 focus:border-blue-500" required>
-            </div>
-
-            <div class="mb-6">
-                <label for="password1" class="block text-gray-700 font-medium mb-2">Confirm Password</label>
-                <input id="password1" name="password1" type="password" placeholder="Confirm Password" class="input-field w-full p-3 border rounded-lg focus:ring-blue-500 focus:border-blue-500" required>
-            </div>
-
-            <div class="mb-4">
-                <label for="profile_picture" class="block text-gray-700 font-medium mb-2">Profile Image</label>
-                <input type="file" id="profile_picture" name="profile_picture" accept="image/*" class="w-full p-3 border rounded-lg focus:ring-blue-500 focus:border-blue-500" required>
-            </div>
-        </div>
-
-        <button type="submit" class="bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 transition-colors w-full">
-            Sign Up
-        </button>
-    </form>
+    <button
+      type="submit"
+      class="bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-600 transition-colors w-full"
+    >
+      Sign Up
+    </button>
+  </form>
 </div>
 {% endblock %}

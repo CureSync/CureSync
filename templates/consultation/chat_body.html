@@ -1,27 +1,37 @@
 ﻿{% load static %}
 
 <div class="space-y-2">
-  {% for obj in chat %}
-    {% if obj.sender == request.user %}
-      <div class="flex justify-end">
-        <div class="bg-blue-500 flex flex-row text-white gap-2 rounded-l-lg rounded-br-lg px-4 py-2 max-w-xs shadow-lg relative">
-          <p class="text-sm">{{ obj.message }}</p>
-          <span class="block text-xs text-white opacity-75 mt-1">{{ obj.created|date:"g:i A" }}</span>
-        </div>
-      </div>
-    {% else %}
-      <div class="flex justify-start items-start">
-        <img src="{% static 'homepage/user-avatar.png' %}" alt="Sender" class="w-8 h-8 rounded-full mr-2 shadow">
-        <div class="bg-gray-300 flex flex-row gap-2 text-black rounded-r-lg rounded-bl-lg px-4 py-2 max-w-xs shadow-lg relative">
-          <p class="text-sm">{{ obj.message }}</p>
-          <span class="block text-xs text-black opacity-75 mt-1">{{ obj.created|date:"g:i A" }}</span>
-        </div>
-      </div>
-    {% endif %}
-  {% empty %}
-    <div class="text-center text-gray-500 py-8">
-      <p class="text-lg">No messages yet!</p>
-      <p class="text-sm mt-2">Start your conversation by sending a message.</p>
+  {% for obj in chat %} {% if obj.sender == request.user %}
+  <div class="flex justify-end">
+    <div
+      class="bg-blue-500 flex flex-row text-white gap-2 rounded-l-lg rounded-br-lg px-4 py-2 max-w-xs shadow-lg relative"
+    >
+      <p class="text-sm">{{ obj.message }}</p>
+      <span class="block text-xs text-white opacity-75 mt-1"
+        >{{ obj.created|date:"g:i A" }}</span
+      >
     </div>
+  </div>
+  {% else %}
+  <div class="flex justify-start items-start">
+    <img
+      src="{% static 'homepage/user-avatar.png' %}"
+      alt="Sender"
+      class="w-8 h-8 rounded-full mr-2 shadow"
+    />
+    <div
+      class="bg-gray-300 flex flex-row gap-2 text-black rounded-r-lg rounded-bl-lg px-4 py-2 max-w-xs shadow-lg relative"
+    >
+      <p class="text-sm">{{ obj.message }}</p>
+      <span class="block text-xs text-black opacity-75 mt-1"
+        >{{ obj.created|date:"g:i A" }}</span
+      >
+    </div>
+  </div>
+  {% endif %} {% empty %}
+  <div class="text-center text-gray-500 py-8">
+    <p class="text-lg">No messages yet!</p>
+    <p class="text-sm mt-2">Start your conversation by sending a message.</p>
+  </div>
   {% endfor %}
 </div>

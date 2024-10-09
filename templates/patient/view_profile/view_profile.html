@@ -16,7 +16,7 @@
 {% endblock %}
 
 {% block body %}
-<div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-100 to-indigo-200 p-4">
+<div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-100 to-blue-200 p-4">
     <div class="bg-white shadow-2xl rounded-2xl p-8 w-full max-w-4xl mx-auto animate-fadeIn">
         <form id="profileForm">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -25,25 +25,25 @@
                     <!-- Username Field -->
                     <div class="form-group">
                         <label class="block text-gray-700 font-semibold mb-2" for="id_username">Username</label>
-                        <input type="text" name="username" value="{{ puser.username }}" class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all duration-300" id="id_username" readonly>
+                        <input type="text" name="username" value="{{ puser.username }}" class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300" id="id_username" readonly>
                     </div>
 
                     <!-- Name Field -->
                     <div class="form-group">
                         <label class="block text-gray-700 font-semibold mb-2" for="id_name">Full Name</label>
-                        <input type="text" name="name" value="{{ puser.patient.name }}" class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all duration-300" id="id_name">
+                        <input type="text" name="name" value="{{ puser.patient.name }}" class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300" id="id_name">
                     </div>
 
                     <!-- Email Field -->
                     <div class="form-group">
                         <label class="block text-gray-700 font-semibold mb-2" for="id_email">Email Address</label>
-                        <input type="email" name="email" value="{{ puser.email }}" class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all duration-300" id="id_email" readonly>
+                        <input type="email" name="email" value="{{ puser.email }}" class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300" id="id_email" readonly>
                     </div>
 
                     <!-- Date of Birth Field -->
                     <div class="form-group">
                         <label class="block text-gray-700 font-semibold mb-2" for="id_dob">Date of Birth</label>
-                        <input type="date" name="dob" value="{{ puser.patient.dob|date:'Y-m-d' }}" class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all duration-300" id="id_dob">
+                        <input type="date" name="dob" value="{{ puser.patient.dob|date:'Y-m-d' }}" class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300" id="id_dob">
                     </div>
                 </div>
 
@@ -52,19 +52,19 @@
                     <!-- Address Field -->
                     <div class="form-group">
                         <label class="block text-gray-700 font-semibold mb-2" for="id_address">Residential Address</label>
-                        <textarea name="address" class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all duration-300" id="id_address" rows="5">{{ puser.patient.address }}</textarea>
+                        <textarea name="address" class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300" id="id_address" rows="5">{{ puser.patient.address }}</textarea>
                     </div>
 
                     <!-- Mobile Number Field -->
                     <div class="form-group">
                         <label class="block text-gray-700 font-semibold mb-2" for="id_mobile_no">Mobile Number</label>
-                        <input type="tel" name="mobile_no" value="{{ puser.patient.mobile_no }}" class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all duration-300" id="id_mobile_no">
+                        <input type="tel" name="mobile_no" value="{{ puser.patient.mobile_no }}" class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300" id="id_mobile_no">
                     </div>
 
                     <!-- Gender Field -->
                     <div class="form-group">
                         <label class="block text-gray-700 font-semibold mb-2" for="id_gender">Gender</label>
-                        <select name="gender" class="form-select w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all duration-300" id="id_gender">
+                        <select name="gender" class="form-select w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300" id="id_gender">
                             <option value="Male" {% if puser.patient.gender == 'Male' %}selected{% endif %}>Male</option>
                             <option value="Female" {% if puser.patient.gender == 'Female' %}selected{% endif %}>Female</option>
                             <option value="Other" {% if puser.patient.gender == 'Other' %}selected{% endif %}>Other</option>
@@ -81,7 +81,7 @@
             {% if request.user.patient %}
             <!-- Save Button -->
             <div class="text-center mt-12">
-                <button type="submit" id="saveBtn" class="btn bg-indigo-600 text-white px-8 py-3 rounded-full hover:bg-indigo-700 transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                <button type="submit" id="saveBtn" class="btn bg-blue-600 text-white px-8 py-3 rounded-full hover:bg-blue-700 transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                     Save Changes
                 </button>
             </div>

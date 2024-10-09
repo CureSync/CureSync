@@ -1,180 +1,263 @@
-{% extends "basic.html" %}
-{% load static %} 
-
-{% block head %}
+{% extends "basic.html" %} {% load static %} {% block head %}
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
 <style>
-    .profile-cover {
-        background-image: url('{% static "patient/signin_page/background-patient.jpg" %}');
-        background-size: cover;
-        background-position: center;
-    }
+  .profile-cover {
+    background-image: url('{% static "patient/signin_page/background-patient.jpg" %}');
+    background-size: cover;
+    background-position: center;
+  }
 </style>
-{% endblock %}
-
-{% block body %}
+{% endblock %} {% block body %}
 <div class="container mx-auto px-4 py-8">
-    <!-- Profile Section -->
-    <div class="w-full mb-8 bg-white rounded-xl overflow-hidden">
-        <div class="profile-cover h-64 relative">
-            <div class="absolute inset-0 bg-black bg-opacity-30"></div>
-            <div class="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2 bg-white p-6 rounded-xl shadow-lg w-11/12 max-w-2xl">
-                <div class="flex flex-col md:flex-row items-center">
-                    <img class="w-32 h-32 rounded-full object-cover shadow-lg mb-4 md:mb-0 md:mr-6" 
-                         src="{{ dp }}" alt="{{ user.doctor.name }}">
-                    <div class="text-center md:text-left">
-                        <h2 class="text-2xl font-semibold text-gray-800">{{ user.doctor.name }}</h2>
-                        <p class="text-gray-600">{{ user.email }}</p>
-                        <a href="{% url 'dviewprofile' user.username %}" 
-                           class="inline-block bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700 transition duration-300 mt-4">
-                            Edit Profile
-                        </a>
-                    </div>
-                </div>
-            </div>
+  <!-- Profile Section -->
+  <div class="w-full mb-8 bg-white rounded-xl overflow-hidden">
+    <div class="profile-cover h-64 relative">
+      <div class="absolute inset-0 bg-black bg-opacity-30"></div>
+      <div
+        class="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2 bg-white p-6 rounded-xl shadow-lg w-11/12 max-w-2xl"
+      >
+        <div class="flex flex-col md:flex-row items-center">
+          <img
+            class="w-32 h-32 rounded-full object-cover shadow-lg mb-4 md:mb-0 md:mr-6"
+            src="{{ dp }}"
+            alt="{{ user.doctor.name }}"
+          />
+          <div class="text-center md:text-left">
+            <h2 class="text-2xl font-semibold text-gray-800">
+              {{ user.doctor.name }}
+            </h2>
+            <p class="text-gray-600">{{ user.email }}</p>
+            <a
+              href="{% url 'dviewprofile' user.username %}"
+              class="inline-block bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-600 transition duration-300 mt-4"
+            >
+              Edit Profile
+            </a>
+          </div>
         </div>
-        <div class="h-32"></div> <!-- Spacer for profile info box -->
+      </div>
     </div>
+    <div class="h-32"></div>
+    <!-- Spacer for profile info box -->
+  </div>
 
-    <!-- Actions Section -->
-    <div class="grid grid-cols-1  md:grid-cols-2 gap-6 mt-8">
-        <a href="{% url 'dconsultation_history' %}" 
-           class="text-blue-500 bg-white action-card w-full h-[15rem] flex flex-col items-center justify-center p-6 rounded-xl shadow-lg hover:shadow-2xl transition duration-300 aspect-square">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
-            </svg>
-            <span class="text-xl font-semibold text-center">View History</span>
-        </a>
-        <button onclick="openFeedbackModal()" 
-                class="text-blue-500 bg-white action-card w-full h-[15rem] flex flex-col items-center justify-center p-6 rounded-xl shadow-lg hover:shadow-2xl transition duration-300 aspect-square">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16  mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
-            </svg>
-            <span class="text-xl font-semibold text-center">Give Feedback</span>
-        </button>
+  <!-- Actions Section -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+    <a
+      href="{% url 'dconsultation_history' %}"
+      class="text-blue-500 bg-white action-card w-full h-[15rem] flex flex-col items-center justify-center p-6 rounded-xl shadow-lg hover:shadow-2xl transition duration-300 aspect-square"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-16 w-16 mb-4"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
+        />
+      </svg>
+      <span class="text-xl font-semibold text-center">View History</span>
+    </a>
+    <button
+      onclick="openFeedbackModal()"
+      class="text-blue-500 bg-white action-card w-full h-[15rem] flex flex-col items-center justify-center p-6 rounded-xl shadow-lg hover:shadow-2xl transition duration-300 aspect-square"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-16 w-16 mb-4"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"
+        />
+      </svg>
+      <span class="text-xl font-semibold text-center">Give Feedback</span>
+    </button>
+  </div>
+  <div
+    class="mt-12 bg-white rounded-xl shadow-md overflow-hidden transition duration-300 ease-in-out transform"
+  >
+    <div
+      class="px-6 py-4 bg-gray-500 text-white flex justify-between items-center"
+    >
+      <h3 class="text-xl leading-6 font-semibold">Ratings and Reviews</h3>
+      <div class="flex items-center">
+        <span class="text-lg font-bold mr-2"
+          >{{ average_rating|floatformat:1 }}</span
+        >
+        <svg
+          class="w-5 h-5 text-yellow-400"
+          fill="currentColor"
+          viewBox="0 0 20 20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
+          ></path>
+        </svg>
+      </div>
     </div>
-    <div class="mt-12 bg-white rounded-xl shadow-md overflow-hidden transition duration-300 ease-in-out transform">
-        <div class="px-6 py-4 bg-gray-500 text-white flex justify-between items-center">
-            <h3 class="text-xl leading-6 font-semibold">Ratings and Reviews</h3>
-            <div class="flex items-center">
-                <span class="text-lg font-bold mr-2">{{ average_rating|floatformat:1 }}</span>
-                <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-                </svg>
- 
+    <div class="divide-y divide-gray-200">
+      {% for i in rate %}
+      <div
+        class="p-6 {% if forloop.counter|divisibleby:2 %}bg-gray-50{% else %}bg-white{% endif %}"
+      >
+        <div class="flex items-center justify-between mb-4">
+          <span class="text-lg font-medium text-gray-900"
+            >{{ i.patient.name }}</span
+          >
+          <div class="flex items-center">
+            <span class="text-3xl font-bold text-blue-600 mr-2"
+              >{{ i.rating }}</span
+            >
+            <div class="flex">
+              {% for star in "12345"|make_list %} {% if forloop.counter <=
+              i.rating %}
+              <svg
+                class="w-5 h-5 text-yellow-400"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
+                ></path>
+              </svg>
+              {% else %}
+              <svg
+                class="w-5 h-5 text-gray-300"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
+                ></path>
+              </svg>
+              {% endif %} {% endfor %}
             </div>
+          </div>
         </div>
-        <div class="divide-y divide-gray-200">
-            {% for i in rate %}
-            <div class="p-6 {% if forloop.counter|divisibleby:2 %}bg-gray-50{% else %}bg-white{% endif %}">
-                <div class="flex items-center justify-between mb-4">
-                    <span class="text-lg font-medium text-gray-900">{{ i.patient.name }}</span>
-                    <div class="flex items-center">
-                        <span class="text-3xl font-bold text-indigo-600 mr-2">{{ i.rating }}</span>
-                        <div class="flex">
-                            {% for star in "12345"|make_list %}
-                                {% if forloop.counter <= i.rating %}
-                                    <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-                                    </svg>
-                                {% else %}
-                                    <svg class="w-5 h-5 text-gray-300" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-                                    </svg>
-                                {% endif %}
-                            {% endfor %}
-                        </div>
-                    </div>
-                </div>
-                <p class="text-gray-600 text-sm italic">"{{ i.review }}"</p>
-            </div>
-            {% empty %}
-            <div class="p-6 text-center text-gray-500">
-                No reviews yet. Be the first to leave a review!
-            </div>
-            {% endfor %}
-        </div>
+        <p class="text-gray-600 text-sm italic">"{{ i.review }}"</p>
+      </div>
+      {% empty %}
+      <div class="p-6 text-center text-gray-500">
+        No reviews yet. Be the first to leave a review!
+      </div>
+      {% endfor %}
     </div>
-    
+  </div>
 </div>
 
-
 <!-- Feedback Modal -->
-<div id="feedbackModal" class="fixed inset-0 bg-gray-900 bg-opacity-70 hidden items-center justify-center z-50">
-    <div class="bg-white rounded-lg p-8 max-w-md w-full shadow-lg transform transition-all duration-300 scale-95 opacity-0">
-        <h2 class="text-3xl font-semibold mb-6 text-gray-900">Give Feedback</h2>
-        <form id="feedbackForm">
-            {% csrf_token %}
-            <textarea id="feedback" name="feedback" rows="6" class="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none" placeholder="Enter your feedback here..."></textarea>
-            <div class="flex justify-end gap-4 mt-6">
-                <button type="button" onclick="closeFeedbackModal()" class="bg-gray-200 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-300 transition duration-300">Cancel</button>
-                <button type="submit" class="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-300">Submit</button>
-            </div>
-        </form>
-    </div>
-
+<div
+  id="feedbackModal"
+  class="fixed inset-0 bg-gray-900 bg-opacity-70 hidden items-center justify-center z-50"
+>
+  <div
+    class="bg-white rounded-lg p-8 max-w-md w-full shadow-lg transform transition-all duration-300 scale-95 opacity-0"
+  >
+    <h2 class="text-3xl font-semibold mb-6 text-gray-900">Give Feedback</h2>
+    <form id="feedbackForm">
+      {% csrf_token %}
+      <textarea
+        id="feedback"
+        name="feedback"
+        rows="6"
+        class="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+        placeholder="Enter your feedback here..."
+      ></textarea>
+      <div class="flex justify-end gap-4 mt-6">
+        <button
+          type="button"
+          onclick="closeFeedbackModal()"
+          class="bg-gray-200 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-300 transition duration-300"
+        >
+          Cancel
+        </button>
+        <button
+          type="submit"
+          class="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-300"
+        >
+          Submit
+        </button>
+      </div>
+    </form>
+  </div>
 </div>
 
 <script>
-function openFeedbackModal() {
-    const modal = document.getElementById('feedbackModal');
-    const modalContent = modal.querySelector('div');
-    modal.classList.remove('hidden');
-    modal.classList.add('flex');
+  function openFeedbackModal() {
+    const modal = document.getElementById("feedbackModal");
+    const modalContent = modal.querySelector("div");
+    modal.classList.remove("hidden");
+    modal.classList.add("flex");
     anime({
-        targets: modalContent,
-        scale: [0.9, 1],
-        opacity: [0, 1],
-        easing: 'easeOutElastic(1, .7)',
-        duration: 600
+      targets: modalContent,
+      scale: [0.9, 1],
+      opacity: [0, 1],
+      easing: "easeOutElastic(1, .7)",
+      duration: 600,
     });
-}
+  }
 
-function closeFeedbackModal() {
-    const modal = document.getElementById('feedbackModal');
-    const modalContent = modal.querySelector('div');
+  function closeFeedbackModal() {
+    const modal = document.getElementById("feedbackModal");
+    const modalContent = modal.querySelector("div");
     anime({
-        targets: modalContent,
-        scale: [1, 0.9],
-        opacity: [1, 0],
-        easing: 'easeInElastic(1, .7)',
-        duration: 300,
-        complete: () => {
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
-        }
+      targets: modalContent,
+      scale: [1, 0.9],
+      opacity: [1, 0],
+      easing: "easeInElastic(1, .7)",
+      duration: 300,
+      complete: () => {
+        modal.classList.add("hidden");
+        modal.classList.remove("flex");
+      },
     });
-}
+  }
 
-document.getElementById('feedbackForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    fetch("{% url 'post_feedback' %}", {
-        method: 'POST',
+  document
+    .getElementById("feedbackForm")
+    .addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      fetch("{% url 'post_feedback' %}", {
+        method: "POST",
         body: new FormData(this),
         headers: {
-            'X-CSRFToken': this.querySelector('[name=csrfmiddlewaretoken]').value
-        }
-    })
-    .then(response => response.text())
-    .then(data => {
-        alert("Feedback submitted successfully!");
-        closeFeedbackModal();
-    })
-    .catch(error => console.error('Error:', error));
-});
-
-// Animate action cards on page load
-document.addEventListener('DOMContentLoaded', () => {
-    anime({
-        targets: '.action-card',
-        translateY: [20, 0],
-        opacity: [0, 1],
-        delay: anime.stagger(100),
-        easing: 'easeOutQuad',
-        duration: 500
+          "X-CSRFToken": this.querySelector("[name=csrfmiddlewaretoken]").value,
+        },
+      })
+        .then((response) => response.text())
+        .then((data) => {
+          alert("Feedback submitted successfully!");
+          closeFeedbackModal();
+        })
+        .catch((error) => console.error("Error:", error));
     });
-});
+
+  // Animate action cards on page load
+  document.addEventListener("DOMContentLoaded", () => {
+    anime({
+      targets: ".action-card",
+      translateY: [20, 0],
+      opacity: [0, 1],
+      delay: anime.stagger(100),
+      easing: "easeOutQuad",
+      duration: 500,
+    });
+  });
 </script>
 {% endblock %}

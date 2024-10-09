@@ -1,167 +1,184 @@
-{% extends "basic.html" %}
-{% load static %}
-
-{% block head %}
+{% extends "basic.html" %} {% load static %} {% block head %}
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCR_yl9s_fGqzm4enDuQ_4elU6H1xSPOa4&libraries=places"></script>
 <script>
-function Functionshow() {
-  document.getElementById("searchbar").value = '';
-  document.getElementById("myDropdown").classList.toggle("hidden");
-  search_symptoms();
-}
+  function Functionshow() {
+    document.getElementById("searchbar").value = "";
+    document.getElementById("myDropdown").classList.toggle("hidden");
+    search_symptoms();
+  }
 
-function Functionsymptoms(name) {
-  var newItem = document.createElement("div");
-  newItem.innerText = name;
-  newItem.setAttribute("class", "symptoms bg-blue-100 text-blue-800 text-sm font-medium mr-2 px-3 py-1 mb-2 inline-block rounded-lg shadow-md transition-transform transform");
-  document.getElementById("sympbox").appendChild(newItem);
-}
+  function Functionsymptoms(name) {
+    var newItem = document.createElement("div");
+    newItem.innerText = name;
+    newItem.setAttribute(
+      "class",
+      "symptoms bg-blue-100 text-blue-800 text-sm font-medium mr-2 px-3 py-1 mb-2 inline-block rounded-lg shadow-md transition-transform transform"
+    );
+    document.getElementById("sympbox").appendChild(newItem);
+  }
 
-function search_symptoms() {
-  let input = document.getElementById('searchbar').value.toLowerCase();
-  let x = document.getElementsByClassName('symptom-item');
-  
-  for (let i = 0; i < x.length; i++) {
-    if (!x[i].innerText.toLowerCase().includes(input)) {
-      x[i].classList.add('hidden');
-    } else {
-      x[i].classList.remove('hidden');
+  function search_symptoms() {
+    let input = document.getElementById("searchbar").value.toLowerCase();
+    let x = document.getElementsByClassName("symptom-item");
+
+    for (let i = 0; i < x.length; i++) {
+      if (!x[i].innerText.toLowerCase().includes(input)) {
+        x[i].classList.add("hidden");
+      } else {
+        x[i].classList.remove("hidden");
+      }
     }
   }
-}
 
-function showNearbyDoctors(doctorType) {
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(position => {
-      const lat = position.coords.latitude;
-      const lng = position.coords.longitude;
-      
-      const mapDiv = document.createElement('div');
-      mapDiv.id = 'map';
-      mapDiv.style.height = '400px';
-      mapDiv.style.width = '100%';
-      mapDiv.style.marginTop = '20px';
-      
-      document.getElementById('mapParent').appendChild(mapDiv);
-      
-      const map = new google.maps.Map(mapDiv, {
-        center: { lat, lng },
-        zoom: 12
-      });
-      
-      const service = new google.maps.places.PlacesService(map);
-      
-      const request = {
-        location: { lat, lng },
-        radius: '5000',
-        type: ['doctor'],
-        keyword: doctorType,
-        limit: 10
-      };
-      
-      service.nearbySearch(request, (results, status) => {
-        if (status === google.maps.places.PlacesServiceStatus.OK) {
-          results.forEach(place => {
-            const marker = new google.maps.Marker({
-              map: map,
-              position: place.geometry.location,
-              title: place.name
-            });
-            
-            google.maps.event.addListener(marker, 'click', () => {
-              const infoWindow = new google.maps.InfoWindow({
-                content: `<strong>${place.name}</strong><br>
-                          ${place.vicinity}<br>
-                          <a href="https://www.google.com/maps/place/?q=place_id:${place.place_id}" target="_blank">Open in Google Maps</a>`
-              });
-              infoWindow.open(map, marker);
-            });
+  function showNearbyDoctors(doctorType) {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const lat = position.coords.latitude;
+          const lng = position.coords.longitude;
+
+          const mapDiv = document.createElement("div");
+          mapDiv.id = "map";
+          mapDiv.style.height = "400px";
+          mapDiv.style.width = "100%";
+          mapDiv.style.marginTop = "20px";
+
+          document.getElementById("mapParent").appendChild(mapDiv);
+
+          const map = new google.maps.Map(mapDiv, {
+            center: { lat, lng },
+            zoom: 12,
           });
-        }
-      });
-    }, () => {
-      alert('Unable to get your location. Please enable geolocation or enter your address manually.');
-    });
-  } else {
-    alert('Geolocation is not supported by your browser.');
-  }
-}
 
-$(document).ready(function(){
-  // Animation for initial load
-  $(".animate-on-load").each(function(index) {
-    $(this).delay(100 * index).animate({opacity: 1, top: 0}, 500);
-  });
+          const service = new google.maps.places.PlacesService(map);
 
-  $("#predict").click(function (event) {
-    event.preventDefault();
+          const request = {
+            location: { lat, lng },
+            radius: "5000",
+            type: ["doctor"],
+            keyword: doctorType,
+            limit: 10,
+          };
 
-    var symptoms = document.getElementsByClassName("symptoms");
-    var noofsym = symptoms.length;
-    var symlist = [];
+          service.nearbySearch(request, (results, status) => {
+            if (status === google.maps.places.PlacesServiceStatus.OK) {
+              results.forEach((place) => {
+                const marker = new google.maps.Marker({
+                  map: map,
+                  position: place.geometry.location,
+                  title: place.name,
+                });
 
-    if(noofsym == 0){
-      alert("Please add some symptoms");
-    } else {
-      for(var i=0; i<symptoms.length; i++){
-        symlist[i] = symptoms[i].innerText;
-      }
-
-      $("#symptoms-section").fadeOut('slow', function() {
-        $("#resultdiv").removeClass('hidden').hide().fadeIn('slow');
-      });
-      $('html,body').animate({
-        scrollTop: $("#resultdiv").offset().top
-      }, 'slow');
-
-      $.ajax({
-        url: 'checkdisease',
-        type: "POST",
-        data: {
-          "noofsym": noofsym,
-          "symptoms": symlist,
-          csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val()
+                google.maps.event.addListener(marker, "click", () => {
+                  const infoWindow = new google.maps.InfoWindow({
+                    content: `<strong>${place.name}</strong><br>
+                          ${place.vicinity}<br>
+                          <a href="https://www.google.com/maps/place/?q=place_id:${place.place_id}" target="_blank">Open in Google Maps</a>`,
+                  });
+                  infoWindow.open(map, marker);
+                });
+              });
+            }
+          });
         },
-        dataType: 'json',
-        success: function (data) {
-          $('#diseasefield').text(data["predicteddisease"]);
-          $('#percentage').text(data["confidencescore"] + "%").css('width', data["confidencescore"] + "%");
-          $('#diseasesearch').text(data["predicteddisease"]);
-          $("#href").attr("href", "https://www.google.com/search?q=" + data["predicteddisease"]);
-          $('#consultdoctor').text(data["consultdoctor"]);
-          $('#pdf').append(`
+        () => {
+          alert(
+            "Unable to get your location. Please enable geolocation or enter your address manually."
+          );
+        }
+      );
+    } else {
+      alert("Geolocation is not supported by your browser.");
+    }
+  }
+
+  $(document).ready(function () {
+    // Animation for initial load
+    $(".animate-on-load").each(function (index) {
+      $(this)
+        .delay(100 * index)
+        .animate({ opacity: 1, top: 0 }, 500);
+    });
+
+    $("#predict").click(function (event) {
+      event.preventDefault();
+
+      var symptoms = document.getElementsByClassName("symptoms");
+      var noofsym = symptoms.length;
+      var symlist = [];
+
+      if (noofsym == 0) {
+        alert("Please add some symptoms");
+      } else {
+        for (var i = 0; i < symptoms.length; i++) {
+          symlist[i] = symptoms[i].innerText;
+        }
+
+        $("#symptoms-section").fadeOut("slow", function () {
+          $("#resultdiv").removeClass("hidden").hide().fadeIn("slow");
+        });
+        $("html,body").animate(
+          {
+            scrollTop: $("#resultdiv").offset().top,
+          },
+          "slow"
+        );
+
+        $.ajax({
+          url: "checkdisease",
+          type: "POST",
+          data: {
+            noofsym: noofsym,
+            symptoms: symlist,
+            csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
+          },
+          dataType: "json",
+          success: function (data) {
+            $("#diseasefield").text(data["predicteddisease"]);
+            $("#percentage")
+              .text(data["confidencescore"] + "%")
+              .css("width", data["confidencescore"] + "%");
+            $("#diseasesearch").text(data["predicteddisease"]);
+            $("#href").attr(
+              "href",
+              "https://www.google.com/search?q=" + data["predicteddisease"]
+            );
+            $("#consultdoctor").text(data["consultdoctor"]);
+            $("#pdf").append(`
               <a href="/download_pdf?disease=${data["predicteddisease"]}&confidence=${data["confidencescore"]}&consultdoctor=${data["consultdoctor"]}" 
                   class="w-full sm:w-auto inline-block bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-lg transition duration-300 text-center">
                   Download PDF Report
               </a>
           `);
 
-          
-          // Call the function to show nearby doctors
-          showNearbyDoctors(data["consultdoctor"] + " doctor");
-        }
-      });
-    }
-  });
-
-  $("#back-button").click(function () {
-    $("#resultdiv").fadeOut('slow', function() {
-      $("#symptoms-section").fadeIn('slow');
+            // Call the function to show nearby doctors
+            showNearbyDoctors(data["consultdoctor"] + " doctor");
+          },
+        });
+      }
     });
-    $('html,body').animate({
-      scrollTop: $("#symptoms-section").offset().top
-    }, 'slow');
+
+    $("#back-button").click(function () {
+      $("#resultdiv").fadeOut("slow", function () {
+        $("#symptoms-section").fadeIn("slow");
+      });
+      $("html,body").animate(
+        {
+          scrollTop: $("#symptoms-section").offset().top,
+        },
+        "slow"
+      );
+    });
   });
-});
 </script>
 <style>
   :root {
-    --primary-blue: #3B82F6;
-    --secondary-blue: #60A5FA;
-    --light-blue: #EFF6FF;
-    --dark-blue: #1E40AF;
+    --primary-blue: #3b82f6;
+    --secondary-blue: #60a5fa;
+    --light-blue: #eff6ff;
+    --dark-blue: #1e40af;
   }
 
   body {
@@ -169,7 +186,7 @@ $(document).ready(function(){
   }
 
   .bg-white {
-    background-color: #FFFFFF;
+    background-color: #ffffff;
   }
 
   .text-blue-600 {
@@ -180,7 +197,7 @@ $(document).ready(function(){
     background-color: var(--primary-blue);
   }
 
-  .hover\:bg-blue-700:hover {
+  .hover\:bg-blue-600:hover {
     background-color: var(--dark-blue);
   }
 
@@ -190,24 +207,38 @@ $(document).ready(function(){
     top: 20px;
   }
 </style>
-{% endblock %}
-
-{% block body %}
+{% endblock %} {% block body %}
 <div class="bg-gray-100 min-h-screen py-12 px-4 sm:px-6 lg:px-8">
   <div class="max-w-6xl mx-auto">
     <div id="symptoms-section" class="grid grid-cols-1 md:grid-cols-2 gap-8">
-      <div class="bg-white p-8 shadow-lg rounded-xl transition duration-300 animate-on-load">
+      <div
+        class="bg-white p-8 shadow-lg rounded-xl transition duration-300 animate-on-load"
+      >
         <h2 class="text-2xl font-semibold mb-6 text-gray-800">Add Symptoms</h2>
-        <button onclick="Functionshow()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300">
+        <button
+          onclick="Functionshow()"
+          class="w-full bg-blue-600 hover:bg-blue-600 text-white font-bold py-3 px-4 rounded-lg transition duration-300"
+        >
           Show Symptom List
         </button>
 
         <div id="myDropdown" class="mt-6 hidden">
-          <input id="searchbar" class="w-full px-4 py-2 border-2 border-gray-300 mb-4 rounded-lg" type="text" onkeyup="search_symptoms()" placeholder="Search symptoms...">
-          
-          <div class="h-64 overflow-y-auto border-2 border-gray-200 p-2 rounded-lg">
+          <input
+            id="searchbar"
+            class="w-full px-4 py-2 border-2 border-gray-300 mb-4 rounded-lg"
+            type="text"
+            onkeyup="search_symptoms()"
+            placeholder="Search symptoms..."
+          />
+
+          <div
+            class="h-64 overflow-y-auto border-2 border-gray-200 p-2 rounded-lg"
+          >
             {% for symptom in list2 %}
-            <div class="symptom-item cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition duration-300" onclick="Functionsymptoms(this.innerText)">
+            <div
+              class="symptom-item cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition duration-300"
+              onclick="Functionsymptoms(this.innerText)"
+            >
               {{ symptom }}
             </div>
             {% endfor %}
@@ -215,10 +246,20 @@ $(document).ready(function(){
         </div>
       </div>
 
-      <div class="bg-white p-8 shadow-lg rounded-xl transition duration-300 animate-on-load">
-        <h2 class="text-2xl font-semibold mb-6 text-gray-800">Selected Symptoms</h2>
-        <div id="sympbox" class="min-h-[200px] p-4 bg-gray-50 border-2 border-gray-200 rounded-lg"></div>
-        <button id="predict" class="w-full mt-6 bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300">
+      <div
+        class="bg-white p-8 shadow-lg rounded-xl transition duration-300 animate-on-load"
+      >
+        <h2 class="text-2xl font-semibold mb-6 text-gray-800">
+          Selected Symptoms
+        </h2>
+        <div
+          id="sympbox"
+          class="min-h-[200px] p-4 bg-gray-50 border-2 border-gray-200 rounded-lg"
+        ></div>
+        <button
+          id="predict"
+          class="w-full mt-6 bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300"
+        >
           Predict
         </button>
       </div>
@@ -226,38 +267,68 @@ $(document).ready(function(){
 
     <div id="resultdiv" class="mt-12 hidden">
       <div id="mapParent" class="max-w-4xl mx-auto my-8 px-4">
-        <button id="back-button" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 px-6 rounded-lg transition duration-300 mb-6">
+        <button
+          id="back-button"
+          class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 px-6 rounded-lg transition duration-300 mb-6"
+        >
           Back to Symptoms
         </button>
         <div class="bg-white p-8 shadow-lg rounded-xl transition duration-300">
-          <h2 class="text-3xl font-bold mb-8 text-gray-800 text-center">Prediction Results</h2>
+          <h2 class="text-3xl font-bold mb-8 text-gray-800 text-center">
+            Prediction Results
+          </h2>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
             <div class="bg-gray-50 p-6 rounded-lg">
-              <h3 class="text-xl font-semibold text-gray-700 mb-3">Predicted Disease</h3>
+              <h3 class="text-xl font-semibold text-gray-700 mb-3">
+                Predicted Disease
+              </h3>
               <p id="diseasefield" class="text-2xl font-bold text-blue-600"></p>
             </div>
             <div class="bg-gray-50 p-6 rounded-lg">
-              <h3 class="text-xl font-semibold text-gray-700 mb-3">Confidence Score</h3>
+              <h3 class="text-xl font-semibold text-gray-700 mb-3">
+                Confidence Score
+              </h3>
               <div class="w-full bg-gray-200 h-8 rounded-full overflow-hidden">
-                <div id="percentage" class="bg-blue-600 h-full text-white text-center leading-8 rounded-full transition-all duration-500 text-sm font-medium" style="width: 0%"></div>
+                <div
+                  id="percentage"
+                  class="bg-blue-600 h-full text-white text-center leading-8 rounded-full transition-all duration-500 text-sm font-medium"
+                  style="width: 0%"
+                ></div>
               </div>
             </div>
           </div>
-      
-          <div class="flex flex-col sm:flex-row justify-center items-center gap-4 mb-10">
-            <a id="href" href="#" target="_blank" rel="noopener noreferrer" class="w-full sm:w-auto inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-lg transition duration-300 text-center">
-              Learn more about <span id="diseasesearch" class="ml-1 font-bold"></span>
+
+          <div
+            class="flex flex-col sm:flex-row justify-center items-center gap-4 mb-10"
+          >
+            <a
+              id="href"
+              href="#"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="w-full sm:w-auto inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition duration-300 text-center"
+            >
+              Learn more about
+              <span id="diseasesearch" class="ml-1 font-bold"></span>
             </a>
-      
-            <form action="consult_a_doctor" method="GET" class="w-full sm:w-auto">
+
+            <form
+              action="consult_a_doctor"
+              method="GET"
+              class="w-full sm:w-auto"
+            >
               {% csrf_token %}
-              <button id="consultbtn" type="submit" class="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-lg transition duration-300">
-                Consult a <span id="consultdoctor" class="ml-1 font-bold"></span> doctor
+              <button
+                id="consultbtn"
+                type="submit"
+                class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition duration-300"
+              >
+                Consult a
+                <span id="consultdoctor" class="ml-1 font-bold"></span> doctor
               </button>
             </form>
 
             <div id="pdf"></div>
-
           </div>
         </div>
       </div>

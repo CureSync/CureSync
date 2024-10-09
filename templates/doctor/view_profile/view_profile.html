@@ -1,21 +1,35 @@
-{% extends "basic.html" %}
-{% load static %}
-
-{% block head %}
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-{% endblock %}
-
-{% block body %}
-<div class="min-h-screen bg-gradient-to-br from-blue-100 to-indigo-200 py-12 px-4 sm:px-6 lg:px-8">
-  <div class="max-w-4xl mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-3xl transition duration-300 ease-in-out transform hover:shadow-xl">
+{% extends "basic.html" %} {% load static %} {% block head %}
+<link
+  href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+  rel="stylesheet"
+/>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+{% endblock %} {% block body %}
+<div
+  class="min-h-screen bg-gradient-to-br from-blue-100 to-blue-200 py-12 px-4 sm:px-6 lg:px-8"
+>
+  <div
+    class="max-w-4xl mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-3xl transition duration-300 ease-in-out transform hover:shadow-xl"
+  >
     <div class="md:flex md: flex-col">
       <div class="md:flex flex-row justify-evenly items-center gap-4 p-4">
-        <img class="h-48 w-full object-cover md:w-48" src="{{ dp }}" alt="Doctor profile image">
+        <img
+          class="h-48 w-full object-cover md:w-48"
+          src="{{ dp }}"
+          alt="Doctor profile image"
+        />
         <div>
-          <div class="uppercase tracking-wide text-sm text-indigo-500 font-semibold mb-1">Doctor Profile</div>
-          <h2 class="block mt-1 text-3xl leading-tight font-bold text-gray-900 mb-4">{{ duser.doctor.name }}</h2>
+          <div
+            class="uppercase tracking-wide text-sm text-blue-500 font-semibold mb-1"
+          >
+            Doctor Profile
+          </div>
+          <h2
+            class="block mt-1 text-3xl leading-tight font-bold text-gray-900 mb-4"
+          >
+            {{ duser.doctor.name }}
+          </h2>
         </div>
       </div>
       <div class="p-8 w-full">
@@ -23,152 +37,330 @@
           {% csrf_token %}
           <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
             <div class="col-span-1 sm:col-span-2">
-              <label for="id_username" class="block text-sm font-medium text-gray-700">Username</label>
-              <input type="text" name="username" id="id_username" value="{{ duser.username }}" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" readonly>
+              <label
+                for="id_username"
+                class="block text-sm font-medium text-gray-700"
+                >Username</label
+              >
+              <input
+                type="text"
+                name="username"
+                id="id_username"
+                value="{{ duser.username }}"
+                class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                readonly
+              />
             </div>
-            
+
             <div>
-              <label for="id_name" class="block text-sm font-medium text-gray-700">Name</label>
-              <input type="text" name="name" id="id_name" value="{{ duser.doctor.name }}" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+              <label
+                for="id_name"
+                class="block text-sm font-medium text-gray-700"
+                >Name</label
+              >
+              <input
+                type="text"
+                name="name"
+                id="id_name"
+                value="{{ duser.doctor.name }}"
+                class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+              />
             </div>
-            
+
             <div>
-              <label for="id_email" class="block text-sm font-medium text-gray-700">Email</label>
-              <input type="email" name="email" id="id_email" value="{{ duser.email }}" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" readonly>
+              <label
+                for="id_email"
+                class="block text-sm font-medium text-gray-700"
+                >Email</label
+              >
+              <input
+                type="email"
+                name="email"
+                id="id_email"
+                value="{{ duser.email }}"
+                class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                readonly
+              />
             </div>
-            
+
             <div>
-              <label for="id_dob" class="block text-sm font-medium text-gray-700">Date of Birth</label>
-              <input type="date" name="dob" id="id_dob" value="{{ duser.doctor.dob|date:'Y-m-d' }}" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+              <label
+                for="id_dob"
+                class="block text-sm font-medium text-gray-700"
+                >Date of Birth</label
+              >
+              <input
+                type="date"
+                name="dob"
+                id="id_dob"
+                value="{{ duser.doctor.dob|date:'Y-m-d' }}"
+                class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+              />
             </div>
-            
+
             <div>
-              <label for="id_gender" class="block text-sm font-medium text-gray-700">Gender</label>
-              <input type="text" name="gender" id="id_gender" value="{{ duser.doctor.gender }}" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+              <label
+                for="id_gender"
+                class="block text-sm font-medium text-gray-700"
+                >Gender</label
+              >
+              <input
+                type="text"
+                name="gender"
+                id="id_gender"
+                value="{{ duser.doctor.gender }}"
+                class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+              />
             </div>
-            
+
             <div class="col-span-1 sm:col-span-2">
-              <label for="id_address" class="block text-sm font-medium text-gray-700">Address</label>
-              <input type="text" name="address" id="id_address" value="{{ duser.doctor.address }}" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+              <label
+                for="id_address"
+                class="block text-sm font-medium text-gray-700"
+                >Address</label
+              >
+              <input
+                type="text"
+                name="address"
+                id="id_address"
+                value="{{ duser.doctor.address }}"
+                class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+              />
             </div>
-            
+
             <div>
-              <label for="id_mobile_no" class="block text-sm font-medium text-gray-700">Mobile Number</label>
-              <input type="tel" name="mobile_no" id="id_mobile_no" value="{{ duser.doctor.mobile_no }}" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+              <label
+                for="id_mobile_no"
+                class="block text-sm font-medium text-gray-700"
+                >Mobile Number</label
+              >
+              <input
+                type="tel"
+                name="mobile_no"
+                id="id_mobile_no"
+                value="{{ duser.doctor.mobile_no }}"
+                class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+              />
             </div>
-            
+
             <div>
-              <label for="id_registration_no" class="block text-sm font-medium text-gray-700">Registration Number</label>
-              <input type="text" name="registration_no" id="id_registration_no" value="{{ duser.doctor.registration_no }}" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+              <label
+                for="id_registration_no"
+                class="block text-sm font-medium text-gray-700"
+                >Registration Number</label
+              >
+              <input
+                type="text"
+                name="registration_no"
+                id="id_registration_no"
+                value="{{ duser.doctor.registration_no }}"
+                class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+              />
             </div>
-            
+
             <div>
-              <label for="id_year_of_registration" class="block text-sm font-medium text-gray-700">Year of Registration</label>
-              <input type="date" name="year_of_registration" id="id_year_of_registration" value="{{ duser.doctor.year_of_registration|date:'Y-m-d' }}" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+              <label
+                for="id_year_of_registration"
+                class="block text-sm font-medium text-gray-700"
+                >Year of Registration</label
+              >
+              <input
+                type="date"
+                name="year_of_registration"
+                id="id_year_of_registration"
+                value="{{ duser.doctor.year_of_registration|date:'Y-m-d' }}"
+                class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+              />
             </div>
-            
+
             <div>
-              <label for="id_qualification" class="block text-sm font-medium text-gray-700">Qualification</label>
-              <input type="text" name="qualification" id="id_qualification" value="{{ duser.doctor.qualification }}" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+              <label
+                for="id_qualification"
+                class="block text-sm font-medium text-gray-700"
+                >Qualification</label
+              >
+              <input
+                type="text"
+                name="qualification"
+                id="id_qualification"
+                value="{{ duser.doctor.qualification }}"
+                class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+              />
             </div>
-            
+
             <div>
-              <label for="id_State_Medical_Council" class="block text-sm font-medium text-gray-700">State Medical Council</label>
-              <input type="text" name="State_Medical_Council" id="id_State_Medical_Council" value="{{ duser.doctor.State_Medical_Council }}" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+              <label
+                for="id_State_Medical_Council"
+                class="block text-sm font-medium text-gray-700"
+                >State Medical Council</label
+              >
+              <input
+                type="text"
+                name="State_Medical_Council"
+                id="id_State_Medical_Council"
+                value="{{ duser.doctor.State_Medical_Council }}"
+                class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+              />
             </div>
-            
+
             <div>
-              <label for="id_specialization" class="block text-sm font-medium text-gray-700">Specialization</label>
-              <input type="text" name="specialization" id="id_specialization" value="{{ duser.doctor.specialization }}" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+              <label
+                for="id_specialization"
+                class="block text-sm font-medium text-gray-700"
+                >Specialization</label
+              >
+              <input
+                type="text"
+                name="specialization"
+                id="id_specialization"
+                value="{{ duser.doctor.specialization }}"
+                class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+              />
             </div>
-            
+
             <div>
-              <label for="id_Rating" class="block text-sm font-medium text-gray-700">Rating</label>
-              <input type="text" name="Rating" id="id_Rating" value="{{ duser.doctor.rating }}/5" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" readonly>
+              <label
+                for="id_Rating"
+                class="block text-sm font-medium text-gray-700"
+                >Rating</label
+              >
+              <input
+                type="text"
+                name="Rating"
+                id="id_Rating"
+                value="{{ duser.doctor.rating }}/5"
+                class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                readonly
+              />
             </div>
 
             <div class="mb-4">
-              <label for="profile_picture" class="block text-gray-700 font-medium mb-2">Profile Image</label>
-              <input type="file" id="profile_picture" name="profile_picture" accept="image/*" class="w-full p-3 border rounded-lg focus:ring-blue-500 focus:border-blue-500" required>
+              <label
+                for="profile_picture"
+                class="block text-gray-700 font-medium mb-2"
+                >Profile Image</label
+              >
+              <input
+                type="file"
+                id="profile_picture"
+                name="profile_picture"
+                accept="image/*"
+                class="w-full p-3 border rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                required
+              />
             </div>
-
           </div>
-          
+
           {% if request.user.doctor %}
           <div class="flex items-center justify-end space-x-4 mt-6">
-            <button type="submit" id="save-btn" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+            <button
+              type="submit"
+              id="save-btn"
+              class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            >
               Save
             </button>
           </div>
           {% endif %}
         </form>
         {% if not request.user.doctor%}
-        <div class="mt-12 bg-white rounded-xl shadow-md overflow-hidden transition duration-300 ease-in-out transform">
-          <div class="px-6 py-4 bg-blue-300 text-blue-800 flex justify-between items-center">
-              <h3 class="text-xl leading-6 font-semibold">Ratings and Reviews</h3>
-              <div class="flex items-center">
-                  <span class="text-lg font-bold mr-2">{{ average_rating|floatformat:1 }}</span>
-                  <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-                  </svg> 
-              </div>
+        <div
+          class="mt-12 bg-white rounded-xl shadow-md overflow-hidden transition duration-300 ease-in-out transform"
+        >
+          <div
+            class="px-6 py-4 bg-blue-300 text-blue-800 flex justify-between items-center"
+          >
+            <h3 class="text-xl leading-6 font-semibold">Ratings and Reviews</h3>
+            <div class="flex items-center">
+              <span class="text-lg font-bold mr-2"
+                >{{ average_rating|floatformat:1 }}</span
+              >
+              <svg
+                class="w-5 h-5 text-yellow-400"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
+                ></path>
+              </svg>
+            </div>
           </div>
           <div class="divide-y divide-gray-200">
-              {% for i in rate %}
-              <div class="p-6 {% if forloop.counter|divisibleby:2 %}bg-gray-50{% else %}bg-white{% endif %}">
-                  <div class="flex items-center justify-between mb-4">
-                      <span class="text-lg font-medium text-gray-900">{{ i.patient.name }}</span>
-                      <div class="flex items-center">
-                          <span class="text-3xl font-bold text-indigo-600 mr-2">{{ i.rating }}</span>
-                          <div class="flex">
-                              {% for star in "12345"|make_list %}
-                                  {% if forloop.counter <= i.rating %}
-                                      <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-                                      </svg>
-                                  {% else %}
-                                      <svg class="w-5 h-5 text-gray-300" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-                                      </svg>
-                                  {% endif %}
-                              {% endfor %}
-                          </div>
-                      </div>
+            {% for i in rate %}
+            <div
+              class="p-6 {% if forloop.counter|divisibleby:2 %}bg-gray-50{% else %}bg-white{% endif %}"
+            >
+              <div class="flex items-center justify-between mb-4">
+                <span class="text-lg font-medium text-gray-900"
+                  >{{ i.patient.name }}</span
+                >
+                <div class="flex items-center">
+                  <span class="text-3xl font-bold text-blue-600 mr-2"
+                    >{{ i.rating }}</span
+                  >
+                  <div class="flex">
+                    {% for star in "12345"|make_list %} {% if forloop.counter <=
+                    i.rating %}
+                    <svg
+                      class="w-5 h-5 text-yellow-400"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
+                      ></path>
+                    </svg>
+                    {% else %}
+                    <svg
+                      class="w-5 h-5 text-gray-300"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
+                      ></path>
+                    </svg>
+                    {% endif %} {% endfor %}
                   </div>
-                  <p class="text-gray-600 text-sm italic">"{{ i.review }}"</p>
+                </div>
               </div>
-              {% empty %}
-              <div class="p-6 text-center text-gray-500">
-                  No reviews yet. Be the first to leave a review!
-              </div>
-              {% endfor %}
+              <p class="text-gray-600 text-sm italic">"{{ i.review }}"</p>
+            </div>
+            {% empty %}
+            <div class="p-6 text-center text-gray-500">
+              No reviews yet. Be the first to leave a review!
+            </div>
+            {% endfor %}
           </div>
         </div>
         {% endif %}
       </div>
     </div>
   </div>
-  
 </div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-  $(document).ready(function() {
-    $('#doctor-form').submit(function(e) {
+  $(document).ready(function () {
+    $("#doctor-form").submit(function (e) {
       e.preventDefault();
       const formData = $(this).serialize();
-      
+
       $.ajax({
         url: "{% url 'saveddata' duser.username %}",
         type: "POST",
         data: formData,
-        success: function() {
+        success: function () {
           alert("Profile updated successfully.");
           location.reload();
         },
-        error: function() {
+        error: function () {
           alert("An error occurred. Please try again.");
-        }
+        },
       });
     });
   });

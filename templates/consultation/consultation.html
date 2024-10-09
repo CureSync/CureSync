@@ -50,7 +50,7 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <!-- Predicted Disease -->
                     <div class="p-4 bg-white shadow rounded-lg flex items-center space-x-4">
-                        <span class="text-indigo-600 font-bold text-lg material-icons">local_hospital</span>
+                        <span class="text-blue-600 font-bold text-lg material-icons">local_hospital</span>
                         <div>
                             <dt class="text-sm font-medium text-gray-600">Predicted Disease</dt>
                             <dd class="mt-1 text-md font-semibold text-gray-900">{{consultation.diseaseinfo.diseasename}}</dd>
@@ -96,7 +96,7 @@
                     <div class="p-4 bg-white shadow rounded-lg flex items-center space-x-4">
                         <span class="text-red-500 font-bold text-lg material-icons">person</span>
                         <div>
-                            <a href="{% url 'dviewprofile' consultation.doctor.user.username %}" class="text-md font-semibold text-indigo-600 hover:text-indigo-800">{{consultation.doctor.name}}</a>
+                            <a href="{% url 'dviewprofile' consultation.doctor.user.username %}" class="text-md font-semibold text-blue-600 hover:text-blue-800">{{consultation.doctor.name}}</a>
                         </div>
                     </div>
                 </div>
@@ -106,7 +106,7 @@
                     <div class="p-4 bg-white shadow rounded-lg flex items-center space-x-4">
                         <span class="text-red-500 font-bold text-lg material-icons">person</span>
                         <div>
-                            <a href="{% url 'pviewprofile' consultation.patient.name %}" class="text-md font-semibold text-indigo-600 hover:text-indigo-800">{{consultation.patient.name}}</a>
+                            <a href="{% url 'pviewprofile' consultation.patient.name %}" class="text-md font-semibold text-blue-600 hover:text-blue-800">{{consultation.patient.name}}</a>
                         </div>
                     </div>
                 </div>
@@ -130,7 +130,7 @@
             <!-- Right Column (Chat) -->
             <div class="flex flex-col gap-2">
                 <div class="chat-container p-4 shadow-lg">
-                    <div class="bg-indigo-600 px-4 py-3 rounded-t-lg">
+                    <div class="bg-blue-600 px-4 py-3 rounded-t-lg">
                         <h3 class="text-lg font-medium text-white">Chat Box</h3>
                     </div>
                     <div id="chat-body" class="chat-messages mt-4 rounded-b-lg">
@@ -152,7 +152,7 @@
                         <button 
                             id="send" 
                             type="submit" 
-                            class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-r-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-0"
+                            class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-r-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-0"
                         >
                             Send
                         </button>
@@ -177,7 +177,7 @@
             },
             success: function(json){
                 $('#chat-msg').val('');
-                $('#msg-list').append('<li class="flex justify-end"><div class="bg-indigo-100 rounded-lg px-4 py-2 max-w-xs"><p class="text-sm text-gray-800">' + json.msg + '</p></div></li>');
+                $('#msg-list').append('<li class="flex justify-end"><div class="bg-blue-100 rounded-lg px-4 py-2 max-w-xs"><p class="text-sm text-gray-800">' + json.msg + '</p></div></li>');
                 scrollToBottom();
             }
         });

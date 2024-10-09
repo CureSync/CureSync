@@ -3,11 +3,19 @@
 {% load static %}
 
 {% block head %}
+<style>
+  .bg-image {
+   background-image: url("{% static 'patient/signup_form/background-patient.jpg' %}");
+   background-size: cover;
+   background-position: center;
+   background-repeat: no-repeat;
+ }
+</style>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 {% endblock %}
 
 {% block body %}
-    <div class="bg-gray-100 flex items-center justify-center p-10">
+    <div class="bg-gray-100 flex items-center justify-center bg-image p-10">
         <form action="{% url 'signup_doctor' %}" method="POST" class="bg-white p-8 rounded-lg shadow-lg w-full max-w-3xl">
             <h1 class="text-2xl font-bold text-center mb-6">Sign Up as Doctor</h1>
             
@@ -107,17 +115,17 @@
                 </div>
 
                 <!-- Gender Field -->
-                <div class="flex flex-row gap-4 justify-evenly w-full border border-gray-300 rounded-lg py-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 hover:shadow-lg transition duration-300" required>
+                <div class="flex flex-row gap-4 justify-evenly w-full border border-gray-300 rounded-lg py-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 hover:shadow-lg transition duration-300" required>
                     <label class="inline-flex items-center gap-4">
-                        <input type="radio" name="gender" value="male" class="form-radio text-indigo-600" {% if form_data.gender == 'male' %}checked{% endif %}>
+                        <input type="radio" name="gender" value="male" class="form-radio text-blue-600" {% if form_data.gender == 'male' %}checked{% endif %}>
                         <span class="text-gray-700">Male</span>
                     </label>
                     <label class="inline-flex items-center gap-4">
-                        <input type="radio" name="gender" value="female" class="form-radio text-indigo-600" {% if form_data.gender == 'female' %}checked{% endif %}>
+                        <input type="radio" name="gender" value="female" class="form-radio text-blue-600" {% if form_data.gender == 'female' %}checked{% endif %}>
                         <span class="text-gray-700">Female</span>
                     </label>
                     <label class="inline-flex items-center gap-4">
-                        <input type="radio" name="gender" value="other" class="form-radio text-indigo-600" {% if form_data.gender == 'other' %}checked{% endif %}>
+                        <input type="radio" name="gender" value="other" class="form-radio text-blue-600" {% if form_data.gender == 'other' %}checked{% endif %}>
                         <span class="text-gray-700">Other</span>
                     </label>
                 </div>
@@ -128,7 +136,7 @@
                 </div>
             </div>
 
-            <button type="submit" class="bg-blue-500 text-white py-3 px-6 rounded-lg hover:bg-blue-600 transition duration-300">Register</button>
+            <button type="submit" class="bg-pink-500 text-white py-3 px-6 rounded-lg hover:bg-pink-600 transition duration-300">Register</button>
         </form>
     </div>
 {% endblock %}
